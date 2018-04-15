@@ -10,6 +10,7 @@ const whiteList = ['/login']
 router.beforeEach((to, from, next) => {
   NProgress.start()
   let userInfo = getUserInfo()
+  userInfo = JSON.parse(userInfo)
   console.log(userInfo)
   if (userInfo && userInfo.token) {
     if (to.path === '/login') {

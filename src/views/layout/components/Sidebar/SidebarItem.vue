@@ -1,8 +1,7 @@
 <template>
   <div class="menu-wrapper" style="color: red;">
     <template v-for="item in routes">
-
-      <router-link style="color:red;" v-if="item.children.length ===1 && !item.children[0].children && !item.alwaysShow" :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
+      <router-link style="color:red;" v-if="item.children && item.children.length ===1 && !item.children[0].children && !item.alwaysShow" :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
         <el-menu-item :index="item.path+'/'+item.children[0].path" :class="{'submenu-title-noDropdown':!isNest}">
           <!-- <svg-icon v-if="item.children[0].meta&&item.children[0].meta.icon" :icon-class="item.children[0].meta.icon"></svg-icon> -->
           <!-- {{item.children[0].meta}} -->

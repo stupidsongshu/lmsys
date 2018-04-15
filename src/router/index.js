@@ -13,13 +13,9 @@ export default new Router({
     //   name: 'HelloWorld',
     //   component: HelloWorld
     // },
+    { path: '/login', component: () => import('@/views/login/index'), hidden: true },
     {
-      path: '/login',
-      component: () => import('@/views/login/index'),
-      hidden: true
-    },
-    {
-      path: '',
+      path: '/',
       component: Layout,
       name: 'app',
       meta: { title: 'app' },
@@ -28,7 +24,7 @@ export default new Router({
         {
           path: 'dashboard',
           component: () => import('@/views/dashboard/index'),
-          meta: { title: 'dashboard children' }
+          meta: { title: 'appchild' }
         }
       ]
     },

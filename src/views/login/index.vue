@@ -3,11 +3,11 @@
     <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
       class="card-box login-form">
       <h3 class="title">乐贷款后台配置系统</h3>
-      <el-form-item prop="username">
+      <el-form-item prop="account">
         <span class="svg-container svg-container_login">
           <!-- <svg-icon icon-class="user" /> -->
         </span>
-        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="username" />
+        <el-input name="username" type="text" v-model="loginForm.account" autoComplete="on" placeholder="username" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -54,11 +54,11 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin'
+        account: '',
+        password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        account: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       loading: false,
@@ -79,12 +79,16 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
-            this.$router.push({ path: '/' })
-          }).catch(() => {
+            this.$message('登录成功')
+            // this.$router.push({ path: '/' })
+            this.$router.push({ path: '/dashboard' })
+          }).catch((err) => {
             this.loading = false
+            console.log(err)
+            this.$message(err.returnMsg)
           })
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           return false
         }
       })
