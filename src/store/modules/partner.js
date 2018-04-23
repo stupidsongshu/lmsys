@@ -1,3 +1,5 @@
+import { partnerAdd } from '@/api/partner'
+
 const partner = {
   state: {
 
@@ -6,7 +8,15 @@ const partner = {
 
   },
   actions: {
-
+    PartnerAdd({ commit }, data) {
+      return new Promise((resolve, reject) => {
+        partnerAdd(data).then(res => {
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    }
   }
 }
 

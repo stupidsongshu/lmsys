@@ -36,10 +36,10 @@ export default new Router({
           component: () => import('@/views/partner/index'),
           meta: { title: 'PartnerIndex1' }
         },{
-          path: 'index2',
-          name: 'PartnerIndex2',
-          component: () => import('@/views/partner/index2'),
-          meta: { title: 'PartnerIndex2' }
+          path: 'table',
+          name: 'partnerTable',
+          component: () => import('@/views/partner/table'),
+          meta: { title: 'table' }
         }
       ]
     }
