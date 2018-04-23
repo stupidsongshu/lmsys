@@ -28,7 +28,7 @@
 const app = {
   state: {
     sidebar: {
-      opened: !sessionStorage.getItem('sidebarStatus')
+      opened: !+sessionStorage.getItem('sidebarStatus')
     }
   },
   mutations: {

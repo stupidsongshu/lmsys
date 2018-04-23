@@ -1,26 +1,3 @@
-// import Vue from 'Vue'
-// import Vuex from 'vuex'
-
-// import app from './modules/app'
-// import partner from './modules/partner'
-// import sort from './modules/sort'
-
-// import getters from './getters'
-
-// Vue.use(Vuex)
-
-// const store = new Vuex.Store({
-//   modules: {
-//     app,
-//     partner,
-//     sort
-//   },
-//   getters
-// })
-
-// export default store
-
-
 import Vue from 'vue'
 import Vuex from 'vuex'
 import app from './modules/app'

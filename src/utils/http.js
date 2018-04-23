@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from '../store'
+// import store from ''
 import md5 from 'blueimp-md5'
 // import CryptoJS from 'cryptojslib/components/aes-min.js'
 import CryptoJS from 'crypto-js'
@@ -8,6 +9,7 @@ import { Message, MessageBox } from 'element-ui'
 import { getUserInfo } from '@/utils/auth'
 
 // console.log(CryptoJS)
+console.log(store)
 export default function httpSign(url, call, data) {
   let ua = config.ua
   let signKey = config.signKey
@@ -16,14 +18,25 @@ export default function httpSign(url, call, data) {
   let timestamp = new Date().getTime()
   let sign =  md5(ua + "&" + call + "&" + timestamp + "&" + signKey)
 
-  let params = JSON.stringify({
-    ua: ua,
-    call: call,
-    args: data,
-    sign: sign,
-    timestamp: timestamp
-  })
+  let commonArgs = {}
+  let userInfo = getUserInfo()
+  userInfo = JSON.parse(userInfo)
+  if (userInfo && userInfo.token) {
+    commonArgs = {
+      account: userInfo.account,
+      token: userInfo.token
+    }
+  }
+  let args = Object.assign({}, commonArgs, data)
 
+  let params = JSON.stringify({
+    ua,
+    call,
+    args,
+    sign,
+    timestamp
+  })
+  console.log(JSON.parse(params))
   let key = CryptoJS.enc.Utf8.parse(cryptoKey)
   let iv  = CryptoJS.enc.Utf8.parse(cryptoIv)
   let encrypted = CryptoJS.AES.encrypt(params, key, {

@@ -1,4 +1,4 @@
-import { getUserInfo, setUserInfo } from '@/utils/auth'
+import { getUserInfo, setUserInfo, removeUserInfo } from '@/utils/auth'
 import { login } from '@/api/login'
 
 const user = {
@@ -22,6 +22,13 @@ const user = {
         }).catch(err => {
           reject(err)
         })
+      })
+    },
+    LogOut({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit('SET_USERINFO', '')
+        removeUserInfo()
+        resolve()
       })
     }
   }

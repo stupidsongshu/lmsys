@@ -3,28 +3,23 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-import HelloWorld from '@/components/HelloWorld'
 import Layout from '@/views/layout/Layout'
 
 export default new Router({
   routes: [
-    // {
-    //   path: '/hello',
-    //   name: 'HelloWorld',
-    //   component: HelloWorld
-    // },
     { path: '/login', component: () => import('@/views/login/index'), hidden: true },
     {
-      path: '/',
+      path: '',
       component: Layout,
-      name: 'app',
-      meta: { title: 'app' },
       redirect: '/dashboard',
+      name: 'Dashboard',
+      meta: { title: 'Dash' },
+      // hidden: true,
       children: [
         {
           path: 'dashboard',
           component: () => import('@/views/dashboard/index'),
-          meta: { title: 'appchild' }
+          meta: { title: 'Board' }
         }
       ]
     },
@@ -33,16 +28,18 @@ export default new Router({
       component: Layout,
       name: 'partner',
       redirect: '/partner/index',
-      meta: { title: 'partner' },
+      meta: { title: 'Partner' },
       children: [
         {
           path: 'index',
+          name: 'PartnerIndex1',
           component: () => import('@/views/partner/index'),
-          meta: { title: 'partner' }
+          meta: { title: 'PartnerIndex1' }
         },{
           path: 'index2',
+          name: 'PartnerIndex2',
           component: () => import('@/views/partner/index2'),
-          meta: { title: 'index2' }
+          meta: { title: 'PartnerIndex2' }
         }
       ]
     }
