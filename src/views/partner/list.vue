@@ -21,6 +21,14 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+      <el-table :data="partnerData">
+        <!-- <el-table-column property="date" label="日期" width="150"></el-table-column>
+        <el-table-column property="name" label="姓名" width="200"></el-table-column>
+        <el-table-column property="address" label="地址"></el-table-column> -->
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -30,7 +38,9 @@ export default {
   name: 'partner',
   data() {
     return {
-      partnerList: []
+      partnerList: [],
+      dialogTableVisible: false,
+      partnerData: {}
     }
   },
   created() {
@@ -42,7 +52,20 @@ export default {
   },
   methods: {
     editPartner(partnerId) {
-      console.log(partnerId)
+      let param = {
+        partnerId,
+        partnerCompany        : this.form.partnerCompany,
+        partnerWebsite        : this.form.partnerWebsite,
+        partnerContactName    : this.form.partnerContactName,
+        partnerContactPhone   : this.form.partnerContactPhone,
+        partnerContactEmail   : this.form.partnerContactEmail
+      }
+
+      console.log(param)
+
+      this.$store.dispatch('PartnerUpdate', param).then(res => {
+
+      })
     }
   }
 }
