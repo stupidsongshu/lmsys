@@ -27,19 +27,19 @@ export default new Router({
       path: '/partner',
       component: Layout,
       name: 'partner',
-      redirect: '/partner/index',
+      redirect: '/partner/list',
       meta: { title: 'Partner' },
       children: [
         {
-          path: 'index',
-          name: 'PartnerIndex1',
-          component: () => import('@/views/partner/index'),
-          meta: { title: 'PartnerIndex1' }
+          path: 'list',
+          name: 'PartnerList',
+          component: () => import('@/views/partner/list'),
+          meta: { title: 'list' }
         },{
-          path: 'table',
-          name: 'partnerTable',
-          component: () => import('@/views/partner/table'),
-          meta: { title: 'table' }
+          path: 'add',
+          name: 'partnerAdd',
+          component: () => import('@/views/partner/add'),
+          meta: { title: 'add' }
         }
       ]
     }

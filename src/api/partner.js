@@ -11,3 +11,9 @@ export function partnerAdd(data) {
 	let call = 'Partner.add'
 	return httpSign(url, call, data)
 }
+
+export function partnerUpdate(data) {
+	let url = '/lm/c/i'
+	let call = 'Partner.update'
+	return httpSign(url, call, data)
+}
