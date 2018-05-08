@@ -13,9 +13,10 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo).then(res => {
           if (res.returnCode === '000000') {
-            setUserInfo(JSON.stringify(res.response))
-            commit('SET_USERINFO', JSON.stringify(res.response))
-            resolve()
+            let data = res.response
+            setUserInfo(JSON.stringify(data))
+            commit('SET_USERINFO', JSON.stringify(data))
+            resolve(res)
           } else {
             reject(res)
           }

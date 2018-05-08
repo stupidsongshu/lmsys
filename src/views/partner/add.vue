@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-wrapper">
     <el-form ref="partnerForm" :model="form" :rules="rules" :label-position="labelPosition" label-width="120px">
       <el-form-item label="合作方名称" prop="partnerCompany">
         <el-input v-model="form.partnerCompany"></el-input>

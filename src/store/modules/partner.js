@@ -1,16 +1,12 @@
-import { partnerAdd, partnerFind, partnerUpdate } from '@/api/partner'
+import { partnerList, partnerFind, partnerAdd, partnerUpdate } from '@/api/partner'
 
 const partner = {
-  state: {
-
-  },
-  mutations: {
-
-  },
+  state: {},
+  mutations: {},
   actions: {
-    PartnerAdd({ commit }, data) {
+    PartnerList({ commit }) {
       return new Promise((resolve, reject) => {
-        partnerAdd(data).then(res => {
+        partnerList().then(res => {
           resolve(res)
         }).catch(err => {
           reject(err)
@@ -20,6 +16,15 @@ const partner = {
     PartnerFind({ commit }, data) {
       return new Promise((resolve, reject) => {
         partnerFind(data).then(res => {
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    PartnerAdd({ commit }, data) {
+      return new Promise((resolve, reject) => {
+        partnerAdd(data).then(res => {
           resolve(res)
         }).catch(err => {
           reject(err)

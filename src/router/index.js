@@ -24,22 +24,43 @@ export default new Router({
       ]
     },
     {
+      path: '/product',
+      component: Layout,
+      redirect: '/product/list',
+      name: 'product',
+      meta: { title: 'Product' },
+      children: [
+        {
+          path: 'list',
+          component: () => import('@/views/product/list'),
+          name: 'productList',
+          meta: { title: 'List' }
+        },
+        {
+          path: 'update',
+          component: () => import('@/views/product/update'),
+          name: 'productUpdate',
+          meta: { title: 'Update' }
+        }
+      ]
+    },
+    {
       path: '/partner',
       component: Layout,
-      name: 'partner',
       redirect: '/partner/list',
+      name: 'partner',
       meta: { title: 'Partner' },
       children: [
         {
           path: 'list',
-          name: 'PartnerList',
           component: () => import('@/views/partner/list'),
-          meta: { title: 'list' }
+          name: 'partnerList',
+          meta: { title: 'List' }
         },{
           path: 'add',
-          name: 'partnerAdd',
           component: () => import('@/views/partner/add'),
-          meta: { title: 'add' }
+          name: 'partnerAdd',
+          meta: { title: 'Add' }
         }
       ]
     }

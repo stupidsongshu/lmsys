@@ -77,15 +77,31 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.$store.dispatch('Login', this.loginForm).then(res => {
             this.loading = false
-            this.$message('登录成功')
+            if (res.returnCode === '000000') {
+              this.$message({
+                showClose: true,
+                message: '登录成功',
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.returnMsg,
+                type: 'warning'
+              })
+            }
             // this.$router.push({ path: '/' })
             this.$router.push({ path: '/dashboard' })
           }).catch((err) => {
             this.loading = false
             console.log(err)
-            this.$message(err.returnMsg)
+            this.$message({
+              showClose: true,
+              message: err.returnMsg,
+              type: 'error'
+            })
           })
         } else {
           // console.log('error submit!!')
