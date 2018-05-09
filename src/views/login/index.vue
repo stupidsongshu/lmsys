@@ -27,39 +27,27 @@
 </template>
 
 <script>
-// import { isvalidUsername } from '@/utils/validate'
+import { isEmptyStr } from '@/utils/validate'
 
 export default {
   name: 'login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      // if (!isvalidUsername(value)) {
-      //   callback(new Error('请输入正确的用户名'))
-      // } else {
-      //   callback()
-      // }
+    const validateIsEmptyStr = (rule, value, cb) => {
+      if (isEmptyStr(value)) {
+        cb(new Error('该项为必填项'))
+      } else {
+        cb()
+      }
+    }
 
-      if (value.trim() === '') {
-        callback(new Error('用户名不能为空'))
-      } else {
-        callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.trim() === '') {
-        callback(new Error('密码不能为空'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         account: '',
         password: ''
       },
       loginRules: {
-        account: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        account:  [{ required: true, trigger: 'blur', message: '账号不能为空', validator: validateIsEmptyStr }],
+        password: [{ required: true, trigger: 'blur', message: '密码不能为空', validator: validateIsEmptyStr }]
       },
       loading: false,
       pwdType: 'password'

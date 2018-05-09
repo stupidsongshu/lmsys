@@ -10,7 +10,12 @@ import { getUserInfo } from '@/utils/auth'
 
 // console.log(CryptoJS)
 console.log(store)
-export default function httpSign(url, call, data) {
+export default function httpSign(options) {
+  let url = options.url
+  let call = options.call
+  let method = options.method || 'post'
+  let data = options.data || {}
+
   let ua = config.ua
   let signKey = config.signKey
   let cryptoKey = config.cryptoKey
@@ -54,7 +59,7 @@ export default function httpSign(url, call, data) {
   return new Promise((resolve, reject) => {
     axios({
       url: process.env.BASE_API + url,
-      method: 'post',
+      method: method,
       data: encrypted.toString()
     }).then(res => {
       let decrypted = CryptoJS.AES.decrypt(res.data, key, {

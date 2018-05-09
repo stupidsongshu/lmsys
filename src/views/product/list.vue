@@ -161,26 +161,26 @@ export default {
 		productStatusFilter(value, row) {
 			return row.productStatus === value
 		},
-		// 新增或修改产品
+		// 产品新增
+		productAdd() {
+			this.$store.dispatch('SetProductId', '')
+			this.$router.push({name: 'productMaterial'})
+		},
+		// 产品修改
 		productUpdate(productId) {
 			let param = {
 				productId
 			}
 			this.$store.dispatch('ProductFind', param).then(res => {
-				console.log(res)
+				if (res.returnCode === '000000') {
+					this.$store.dispatch('SetProductId', productId)
+					this.$router.push({name: 'productMaterial'})
+				}
 			})
-		},
-		// 产品新增
-		productAdd() {}
+		}
 	}
 }
 </script>
-
-<style>
-	.main-wrapper {
-		padding: 10px;
-	}
-</style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 	.icon-name {

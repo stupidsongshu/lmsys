@@ -41,6 +41,22 @@ export default new Router({
           component: () => import('@/views/product/update'),
           name: 'productUpdate',
           meta: { title: 'Update' }
+        },
+        {
+          path: 'material',
+          component: () => import('@/views/product/material/index'),
+          redirect: {name: 'productMaterialStep1'},
+          hidden: true,
+          name: 'productMaterial',
+          meta: { title: 'Material' },
+          children: [
+            {
+              path: 'step1',
+              component: () => import('@/views/product/material/step1'),
+              name: 'productMaterialStep1',
+              meta: { title: 'step1' },
+            }
+          ]
         }
       ]
     },
