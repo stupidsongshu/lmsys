@@ -5,7 +5,7 @@ import md5 from 'blueimp-md5'
 // import CryptoJS from 'cryptojslib/components/aes-min.js'
 import CryptoJS from 'crypto-js'
 import config from '@/config'
-import { Message, MessageBox } from 'element-ui'
+import { Message, MessageBox, Loading } from 'element-ui'
 import { getUserInfo } from '@/utils/auth'
 
 // console.log(CryptoJS)
@@ -57,11 +57,21 @@ export default function httpSign(options) {
   // })
 
   return new Promise((resolve, reject) => {
+    const loadingInstance = Loading.service({
+      fullscreen: true,
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+
     axios({
       url: process.env.BASE_API + url,
       method: method,
       data: encrypted.toString()
     }).then(res => {
+      loadingInstance.close()
+
       let decrypted = CryptoJS.AES.decrypt(res.data, key, {
         iv: iv,
         mode: CryptoJS.mode.CBC,
@@ -86,6 +96,8 @@ export default function httpSign(options) {
       //     reject(resData)
       //   }
       // })
+    }).catch(err => {
+      loading.close()
     })
   })
 

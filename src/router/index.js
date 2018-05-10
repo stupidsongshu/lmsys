@@ -37,12 +37,6 @@ export default new Router({
           meta: { title: 'List' }
         },
         {
-          path: 'update',
-          component: () => import('@/views/product/update'),
-          name: 'productUpdate',
-          meta: { title: 'Update' }
-        },
-        {
           path: 'material',
           component: () => import('@/views/product/material/index'),
           redirect: {name: 'productMaterialStep1'},
@@ -54,7 +48,13 @@ export default new Router({
               path: 'step1',
               component: () => import('@/views/product/material/step1'),
               name: 'productMaterialStep1',
-              meta: { title: 'step1' },
+              meta: { title: 'step1', step: 1 },
+            },
+            {
+              path: 'step2',
+              component: () => import('@/views/product/material/step2'),
+              name: 'productMaterialStep2',
+              meta: { title: 'step2', step: 2 }
             }
           ]
         }

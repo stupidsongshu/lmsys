@@ -31,3 +31,8 @@ export function productUpdateFee(data) {
 	let call = 'Product.updateFee'
 	return httpSign({url, call, data})
 }
+
+export function propertyConfig() {
+	let call = 'Property.config'
+	return httpSign({url, call})
+}

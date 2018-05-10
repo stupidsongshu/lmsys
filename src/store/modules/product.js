@@ -1,4 +1,4 @@
-import { productList, productUpdateStatus, productUpdateShow, productFind, productCreate, productUpdateFee } from '@/api/product'
+import { productList, productUpdateStatus, productUpdateShow, productFind, productCreate, productUpdateFee, propertyConfig } from '@/api/product'
 
 const product = {
 	state: {
@@ -62,6 +62,15 @@ const product = {
 		ProductUpdateFee({ commit }, data) {
 			return new Promise((resolve, reject) => {
 				productUpdateFee(data).then(res => {
+					resolve(res)
+				}).catch(err => {
+					reject(err)
+				})
+			})
+		},
+		PropertyConfig({ commit }) {
+			return new Promise((resolve, reject) => {
+				propertyConfig().then(res => {
 					resolve(res)
 				}).catch(err => {
 					reject(err)

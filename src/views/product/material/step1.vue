@@ -26,10 +26,10 @@
 
           <el-form-item label="产品类型" prop="productTypeId">
             <el-select v-model="productMaterialBaseInfoForm.productTypeId" placeholder="请选择产品类型" style="width: 100%;">
-              <el-option label="现金贷"   value="1"></el-option>
-              <el-option label="还信用卡" value="2"></el-option>
-              <el-option label="企业贷"   value="3"></el-option>
-              <el-option label="车贷"     value="4"></el-option>
+              <el-option label="现金贷"   :value="1"></el-option>
+              <el-option label="还信用卡" :value="2"></el-option>
+              <el-option label="企业贷"   :value="3"></el-option>
+              <el-option label="车贷"     :value="4"></el-option>
             </el-select>
           </el-form-item>
 
@@ -105,6 +105,14 @@ import { isEmptyStr } from '@/utils/validate'
 import { mapGetters } from 'vuex'
 
 export default {
+  props: {
+    productInfo: {
+      type: Object,
+      default: function() {
+        return {}
+      }
+    }
+  },
   data() {
     const validateIsEmptyStr = (rule, value, cb) => {
       if (isEmptyStr(value)) {
@@ -168,11 +176,32 @@ export default {
         this.partnerList = res.response
       }
     })
+
+    if (this.productId) {
+      let product = this.productInfo.product
+      this.productMaterialBaseInfoForm = {
+        productName: product.productName,
+        packageName: product.productId,
+        productSubTitle: product.productSubTitle,
+        partnerId: product.partnerId,
+        productTypeId: product.productTypeId,
+        h5ApplyUrl: product.h5ApplyUrl
+      }
+      this.productMaterialFeeForm = {
+        minCreLine: product.minCreline,
+        maxCreLine: product.maxCreline,
+        interestRateType: product.interestrateType,
+        interestRate: product.interestrate,
+        instalType: product.instalType,
+        instalPeriodList: product.instalPeriodList,
+        instalReturnType: product.instalReturnType
+      }
+    }
   },
   methods: {
     handleChange(val) {
       val.forEach((item, index) => {
-        if (item !== '1' && !this.$store.getters.productId) {
+        if (item !== '1' && !this.productId) {
           val.splice(index, 1)
           this.$message({
             showClose: true,
@@ -199,13 +228,24 @@ export default {
             // 产品H5申请链接
             h5ApplyUrl:      this.productMaterialBaseInfoForm.h5ApplyUrl,
             // 产品类型Id (int)
-            productTypeId:   parseInt(this.productMaterialBaseInfoForm.productTypeId)
+            productTypeId:   this.productMaterialBaseInfoForm.productTypeId
           }
 
-          this.dispatch('ProductCreate', param).then(res => {
+          this.$store.dispatch('ProductCreate', param).then(res => {
             console.log(res)
             if (res.returnCode === '000000') {
+              this.$message({
+                showClose: true,
+                message: res.returnMsg,
+                type: 'success'
+              })
               this.$store.dispatch('SetProductId', res.response)
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.returnMsg,
+                type: 'warning'
+              })
             }
           })
         }
@@ -229,10 +269,19 @@ export default {
           }
 
           this.$store.dispatch('ProductUpdateFee', param).then(res => {
-            this.$message({
-              showClose: true,
-              message: res.returnMsg
-            })
+            if (res.returnCode === '000000') {
+              this.$message({
+                showClose: true,
+                message: res.returnMsg,
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.returnMsg,
+                type: 'warning'
+              })
+            }
           })
         }
       })
@@ -240,13 +289,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.collapse-item-title {
-  padding-left: 1rem;
-  border-left: 3px solid #409EFF;
-  color: #409EFF;
-  font-size: 1rem;
-  font-weight: bold;
-}
-</style>

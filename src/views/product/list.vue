@@ -1,7 +1,7 @@
 <template>
   <div class="main-wrapper">
 		<el-button-group>
-			<el-button type="primary" @click="productAdd">添加应用</el-button>
+			<el-button type="primary" @click="toProductMaterial()">添加应用</el-button>
 		</el-button-group>
 
     <el-table :data="productList" border stripe highlight-current-row style="width: 100%">
@@ -39,7 +39,7 @@
 			</el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click.native.prevent="productUpdate(scope.row.productId)" size="small">修改</el-button>
+          <el-button @click.native.prevent="toProductMaterial(scope.row.productId)" size="small">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -161,22 +161,15 @@ export default {
 		productStatusFilter(value, row) {
 			return row.productStatus === value
 		},
-		// 产品新增
-		productAdd() {
-			this.$store.dispatch('SetProductId', '')
-			this.$router.push({name: 'productMaterial'})
-		},
-		// 产品修改
-		productUpdate(productId) {
-			let param = {
-				productId
+		// 产品新增或修改
+		toProductMaterial(productId) {
+			if (productId) {
+				this.$store.dispatch('SetProductId', productId)
+			} else {
+				this.$store.dispatch('SetProductId', '')
 			}
-			this.$store.dispatch('ProductFind', param).then(res => {
-				if (res.returnCode === '000000') {
-					this.$store.dispatch('SetProductId', productId)
-					this.$router.push({name: 'productMaterial'})
-				}
-			})
+
+			this.$router.push({name: 'productMaterial'})
 		}
 	}
 }
