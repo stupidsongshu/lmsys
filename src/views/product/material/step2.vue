@@ -9,7 +9,11 @@
           <el-form-item label="特性标签">
             <el-button class="btn-multi" v-for="(item, index) in productMaterialFeatureForm.characterLabel" :key="index" @click="tagSelect(item, 'characterLabel')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
 
-            <tag-input name="characterLabel" @characterLabelEmit="propertyConfigAddCharacterLabel"></tag-input>
+            <tag-input
+              name="characterLabel"
+              :tags="productMaterialFeatureForm.characterLabel" 
+              @characterLabelEmit="propertyConfigAddCharacterLabel">
+            </tag-input>
 
             <div>
               <el-tag
@@ -26,7 +30,10 @@
           <el-form-item label="适用人群" prop="suitRole">
             <el-button class="btn-multi" v-for="(item, index) in productMaterialFeatureForm.suitRole" :key="index" @click="tagSelect(item, 'suitRole')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
 
-            <tag-input name="suitRole" @suitRoleEmit="propertyConfigAddSuitRole"></tag-input>
+            <tag-input
+              name="suitRole"
+              @suitRoleEmit="propertyConfigAddSuitRole">
+            </tag-input>
 
             <div>
               <el-tag
@@ -196,9 +203,10 @@ export default {
           text: list,
           disabled: true
         })
-        characterLabel.forEach(item => {
+        characterLabel.forEach((item, index, arr) => {
           if (list === item.text) {
             item.disabled = true
+            // arr[index].disabled = true
           }
         })
       })
@@ -216,6 +224,7 @@ export default {
         applyCondition,
         applyMaterials
       }
+      console.log(this.characterLabelTags)
       console.log(this.productMaterialFeatureForm)
     },
 
@@ -233,15 +242,21 @@ export default {
         }
       }
     },
-    tagClose(tag, tagArr) {
+    tagClose(tag, tagArr, propertyConfigArr) {
       tagArr.splice(tagArr.indexOf(tag), 1)
-      tag.disabled = false
+      // tag.disabled = false // bug 不会更新
+      for (let i = 0, len = propertyConfigArr.length; i < len; i ++) {
+        if (propertyConfigArr[i].text === tag.text) {
+          propertyConfigArr[i].disabled = false
+          break
+        }
+      }
     },
     characterLabelTagClose(tag) {
-      this.tagClose(tag, this.characterLabelTags)
+      this.tagClose(tag, this.characterLabelTags, this.productMaterialFeatureForm.characterLabel)
     },
     suitRoleTagClose(tag) {
-      this.tagClose(tag, this.suitRoleTags)
+      this.tagClose(tag, this.suitRoleTags, this.productMaterialFeatureForm.suitRole)
     },
     // 标签增删 end
 

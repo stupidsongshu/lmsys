@@ -20,6 +20,12 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    tags: {
+      type: Array,
+      default: function () {
+        return []
+      }
     }
   },
   data() {
@@ -32,13 +38,24 @@ export default {
     showInput() {
       this.inputVisible = true;
       this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
     },
     handleInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue.trim() !== '') {
-        this.$emit(this.name + 'Emit', inputValue.trim())
+      let inputValue = this.inputValue.trim();
+      if (inputValue !== '') {
+        for (let i = 0; i < this.tags.length; i++) {
+          if (this.tags[i].text === inputValue) {
+            this.$message({
+              showClose: true,
+              message: '标签已存在',
+              type: 'error'
+            })
+            break
+          } else {
+            this.$emit(this.name + 'Emit', inputValue)
+          }
+        }
       }
       this.inputVisible = false;
       this.inputValue = '';
