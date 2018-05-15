@@ -97,6 +97,7 @@ export default function httpSign(options) {
       //   }
       // })
     }).catch(err => {
+      console.log(err)
       loading.close()
     })
   })

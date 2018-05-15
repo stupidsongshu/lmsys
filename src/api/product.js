@@ -32,7 +32,12 @@ export function productUpdateFee(data) {
 	return httpSign({url, call, data})
 }
 
-export function propertyConfig() {
+export function propertyConfigGet() {
 	let call = 'Property.config'
 	return httpSign({url, call})
+}
+
+export function propertyConfigAdd(data) {
+	let call = 'Property.addPropertyValue'
+	return httpSign({url, call, data})
 }
