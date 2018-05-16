@@ -7,12 +7,12 @@
         </template>
         <el-form ref="productMaterialFeature" :model="productMaterialFeatureForm" :label-position="labelPosition" label-width="120px">
           <el-form-item label="特性标签">
-            <el-button class="btn-multi" v-for="(item, index) in productMaterialFeatureForm.characterLabel" :key="index" @click="tagSelect(item, 'characterLabel')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+            <el-button class="btn-multi" v-for="(item, index) in productMaterialFeatureForm.characterLabelList" :key="index" @click="tagSelect(item, 'characterLabel')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
 
             <tag-input
               name="characterLabel"
-              :tags="productMaterialFeatureForm.characterLabel" 
-              @characterLabelEmit="propertyConfigAddCharacterLabel">
+              :list="productMaterialFeatureForm.characterLabelList" 
+              v-on:tagInputEmit="propertyConfigAddEvent">
             </tag-input>
 
             <div>
@@ -21,18 +21,19 @@
                 v-for="tag in characterLabelTags"
                 closable
                 :disable-transitions="false"
-                @close="characterLabelTagClose(tag)">
+                @close="tagClose(tag, 'characterLabel')">
                 {{tag.text}}
               </el-tag>
             </div>
           </el-form-item>
 
           <el-form-item label="适用人群" prop="suitRole">
-            <el-button class="btn-multi" v-for="(item, index) in productMaterialFeatureForm.suitRole" :key="index" @click="tagSelect(item, 'suitRole')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+            <el-button class="btn-multi" v-for="(item, index) in productMaterialFeatureForm.suitRoleList" :key="index" @click="tagSelect(item, 'suitRole')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
 
             <tag-input
               name="suitRole"
-              @suitRoleEmit="propertyConfigAddSuitRole">
+              :list="productMaterialFeatureForm.suitRoleList"
+              v-on:tagInputEmit="propertyConfigAddEvent">
             </tag-input>
 
             <div>
@@ -41,7 +42,7 @@
                 v-for="tag in suitRoleTags"
                 closable
                 :disable-transitions="false"
-                @close="suitRoleTagClose(tag)">
+                @close="tagClose(tag, 'suitRole')">
                 {{tag.text}}
               </el-tag>
             </div>
@@ -49,7 +50,7 @@
 
           <el-form-item label="推荐星数" prop="recommendStar">
             <el-rate
-              v-model="value5"
+              v-model="productMaterialFeatureForm.recomStar"
               show-score
               text-color="#ff9900"
               score-template="{value}">
@@ -64,7 +65,11 @@
               <el-radio-button label="none">NONE</el-radio-button>
             </el-radio-group>
           </el-form-item>
-        </el-form>        
+
+          <el-form-item>
+            <el-button type="primary" @click="productMaterialFeatureUpdate">保存</el-button>
+          </el-form-item>
+        </el-form>
       </el-collapse-item>
     </el-collapse>
   </div>
@@ -89,9 +94,9 @@ export default {
       activeNames: ['1'],
       labelPosition: 'right',
       productMaterialFeatureForm: {},
-      value5: 3.5,
-      characterLabelTags: [],
-      suitRoleTags: [],
+      // recomStarVal: 3.5,
+      characterLabelTags: [], // 已选系统参数的标签组合 -- 特性标签
+      suitRoleTags: [], // 已选系统参数的标签组合 -- 适用人群
     }
   },
   computed: {
@@ -120,36 +125,38 @@ export default {
       if (!this.productId) return
       let productList = this.productInfo.list
 
-      let characterLabel = []  // 特性标签
-      let suitRole       = []  // 适用人群
-      let applyProcess   = []  // 申请流程
-      let applyCondition = []  // 申请条件
-      let applyMaterials = []  // 申请材料
+      // 所有的系统参数
+      let characterLabelList = [] // 特性标签
+      let suitRoleList       = [] // 适用人群
+      let applyProcessList   = [] // 申请流程
+      let applyConditionList = [] // 申请条件
+      let applyMaterialsList = [] // 申请材料
 
-      let characterLabelList = []  // 特性标签
-      let suitRoleList       = []  // 适用人群
-      let applyProcessList   = []  // 申请流程
-      let applyConditionList = []  // 申请条件
-      let applyMaterialsList = []  // 申请材料
-      var recom_star         = []  // 推荐星数
-      var features_label     = []  // 特性状态
+      // 选定产品已有的系统参数
+      let characterLabelTags = [] // 特性标签
+      let suitRoleTags       = [] // 适用人群
+      let applyProcessTags   = [] // 申请流程
+      let applyConditionTags = [] // 申请条件
+      let applyMaterialsTags = [] // 申请材料
+      let recomStarTags      = [] // 推荐星数
+      let featuresLabelTags  = [] // 特性状态
 
       data.forEach(item => {
         switch(item.property) {
           case "character_label":
-            characterLabel = item.propertyValueList
+            characterLabelList = item.propertyValueList
             break
           case "suit_role":
-            suitRole = item.propertyValueList
+            suitRoleList = item.propertyValueList
             break
           case 'apply_process':
-            applyProcess = item.propertyValueList
+            applyProcessList = item.propertyValueList
             break
           case 'apply_condition':
-            applyCondition = item.propertyValueList
+            applyConditionList = item.propertyValueList
             break
           case 'apply_materials':
-            applyMaterials = item.propertyValueList
+            applyMaterialsList = item.propertyValueList
             break
         }
       })
@@ -168,71 +175,87 @@ export default {
         productList.forEach(function(item) {
           switch(item[0]) {
             case 'character_label_list':
-              characterLabelList = strToArr(item[1]);
-              break;
+              characterLabelTags = strToArr(item[1])
+              break
             case 'suit_role_list':
-              suitRoleList = strToArr(item[1]);
-              break;
+              suitRoleTags       = strToArr(item[1])
+              break
             case 'recom_star':
-              recom_star = strToArr(item[1]);
-              break;
+              recomStarTags      = strToArr(item[1])
+              break
             case 'features_label':
-              features_label = strToArr(item[1]);
-              break;
+              featuresLabelTags  = strToArr(item[1])
+              break
             case 'apply_process_list':
-              applyProcessList = strToArr(item[1]);
-              break;
+              applyProcessTags   = strToArr(item[1])
+              break
             case 'apply_condition_list':
-              applyConditionList = strToArr(item[1]);
-              break;
+              applyConditionTags = strToArr(item[1])
+              break
             case 'apply_materials_list':
-              applyMaterialsList = strToArr(item[1]);
-              break;
+              applyMaterialsTags = strToArr(item[1])
+              break
           }
         })
       }
 
-      characterLabel.forEach((item, index, arr) => {
-        arr[index] = {
-          text: item,
-          disabled: false
-        }
-      })
-      characterLabelList.forEach(list => {
-        this.characterLabelTags.push({
-          text: list,
-          disabled: true
-        })
-        characterLabel.forEach((item, index, arr) => {
-          if (list === item.text) {
-            item.disabled = true
-            // arr[index].disabled = true
-          }
-        })
-      })
-      suitRole.forEach((item, index, arr) => {
-        arr[index] = {
-          text: item,
-          disabled: false
-        }
-      })
+      this.handleListTags('characterLabel', characterLabelList, characterLabelTags)
+      this.handleListTags('suitRole', suitRoleList, suitRoleTags)
 
       this.productMaterialFeatureForm = {
-        characterLabel,
-        suitRole,
-        applyProcess,
-        applyCondition,
-        applyMaterials
+        characterLabelList,
+        suitRoleList,
+        applyProcessList,
+        applyConditionList,
+        applyMaterialsList,
+        recomStar: parseFloat(recomStarTags[0]),
+        featureState: featuresLabelTags[0]
       }
-      console.log(this.characterLabelTags)
-      console.log(this.productMaterialFeatureForm)
+      console.log(this.productMaterialFeatureForm.featureState[0])
+    },
+    /**
+     * @description 第一步初始化'所有的系统参数'；第二步根据'选定产品已有的系统参数'处理标签组合、系统参数列表
+     * @param name 需要处理的系统参数
+     * @param list 所有的系统参数
+     * @param tags 选定产品已有的系统参数
+     */
+    handleListTags(name, list, tags) {
+      // 第一步初始化'所有的系统参数'
+      list.forEach((item, index, arr) => {
+        arr[index] = {
+          text: item,
+          disabled: false
+        }
+      })
+      // 第二步根据'选定产品已有的系统参数'处理标签组合、系统参数列表
+      tags.forEach(tag => {
+        switch (name) {
+          case 'characterLabel':
+            this.characterLabelTags.push({
+              text: tag,
+              disabled: true
+            })
+            break;
+          case 'suitRole':
+            this.suitRoleTags.push({
+              text: tag,
+              disabled: true
+            })
+            break;
+        }
+        list.forEach((item, index, arr) => {
+          if (tag === item.text) {
+            item.disabled = true
+          }
+        })
+      })
     },
 
     // 标签增删 start
     tagSelect(item, tagName) {
       if (!item.disabled) {
         item.disabled = true
-        switch(tagName) {
+        switch (tagName) {
           case 'characterLabel':
             this.characterLabelTags.push(item)
             break
@@ -242,7 +265,21 @@ export default {
         }
       }
     },
-    tagClose(tag, tagArr, propertyConfigArr) {
+    tagClose(tag, name) {
+      let tagArr = []
+      let propertyConfigArr = []
+
+      switch (name) {
+        case 'characterLabel':
+          tagArr = this.characterLabelTags
+          propertyConfigArr = this.productMaterialFeatureForm.characterLabelList
+          break;
+        case 'suitRole':
+          tagArr = this.suitRoleTags
+          propertyConfigArr = this.productMaterialFeatureForm.suitRoleList
+          break;
+      }
+
       tagArr.splice(tagArr.indexOf(tag), 1)
       // tag.disabled = false // bug 不会更新
       for (let i = 0, len = propertyConfigArr.length; i < len; i ++) {
@@ -251,12 +288,6 @@ export default {
           break
         }
       }
-    },
-    characterLabelTagClose(tag) {
-      this.tagClose(tag, this.characterLabelTags, this.productMaterialFeatureForm.characterLabel)
-    },
-    suitRoleTagClose(tag) {
-      this.tagClose(tag, this.suitRoleTags, this.productMaterialFeatureForm.suitRole)
     },
     // 标签增删 end
 
@@ -288,19 +319,37 @@ export default {
         }
       })
     },
-    // 添加系统参数 -- 特性标签
-    propertyConfigAddCharacterLabel(data) {
-      let property = 'character_label'
-      let propertyValue = data
-      this.propertyConfigAdd({property, propertyValue})
+    // 添加系统参数 -- 监听子组件 tagInput 的 emit 事件
+    propertyConfigAddEvent(data) {
+      let property = ''
+      let propertyValue = data.value
+      switch (data.name) {
+        case 'characterLabel':
+          property = 'character_label'
+          break
+        case 'suitRole':
+          property = 'suit_role'
+          break
+      }
+      // console.log({property, propertyValue}) // 执行多达28次?
+      // this.propertyConfigAdd({property, propertyValue})
     },
-    // 添加系统参数 -- 适用人群
-    propertyConfigAddSuitRole(data) {
-      let property = 'suit_role'
-      let propertyValue = data
-      this.propertyConfigAdd({property, propertyValue})
-    }
     // 系统参数 end
+
+    productMaterialFeatureUpdate() {
+      console.log(this.characterLabelTags)
+      console.log(this.suitRoleTags)
+      console.log(this.productMaterialFeatureForm.recomStar)
+      console.log(this.productMaterialFeatureForm.featureState)
+
+      let param = {}
+      console.log(param)
+      return
+
+      this.$store.dispatch('ProductUpdateCharacter', param).then(res => {
+        console.log(res)
+      })
+    }
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <el-input
       class="btn-multi"
       v-if="inputVisible"
-      v-model="inputValue"
+      v-model.trim="inputValue"
       ref="saveTagInput"
       size="medium"
       @keyup.enter.native="handleInputConfirm"
@@ -21,7 +21,7 @@ export default {
       type: String,
       default: ''
     },
-    tags: {
+    list: {
       type: Array,
       default: function () {
         return []
@@ -42,10 +42,10 @@ export default {
       })
     },
     handleInputConfirm() {
-      let inputValue = this.inputValue.trim();
+      let inputValue = this.inputValue;
       if (inputValue !== '') {
-        for (let i = 0; i < this.tags.length; i++) {
-          if (this.tags[i].text === inputValue) {
+        for (let i = 0; i < this.list.length; i++) {
+          if (this.list[i].text === inputValue) {
             this.$message({
               showClose: true,
               message: '标签已存在',
@@ -53,7 +53,7 @@ export default {
             })
             break
           } else {
-            this.$emit(this.name + 'Emit', inputValue)
+            this.$emit('tagInputEmit', {name: this.name, value: inputValue})
           }
         }
       }

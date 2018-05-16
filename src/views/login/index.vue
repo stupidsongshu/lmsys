@@ -56,7 +56,7 @@ export default {
   methods: {
     showPwd() {
       if (this.pwdType === 'password') {
-        this.pwdType = ''
+        this.pwdType = 'text'
       } else {
         this.pwdType = 'password'
       }
@@ -80,7 +80,6 @@ export default {
                 type: 'warning'
               })
             }
-            // this.$router.push({ path: '/' })
             this.$router.push({ path: '/dashboard' })
           }).catch((err) => {
             this.loading = false
@@ -92,7 +91,6 @@ export default {
             })
           })
         } else {
-          // console.log('error submit!!')
           return false
         }
       })

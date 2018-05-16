@@ -41,3 +41,8 @@ export function propertyConfigAdd(data) {
 	let call = 'Property.addPropertyValue'
 	return httpSign({url, call, data})
 }
+
+export function productUpdateCharacter(data) {
+	let call = 'Product.updateCharacter'
+	return httpSign({url, call, data})
+}
