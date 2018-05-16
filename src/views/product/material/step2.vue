@@ -337,17 +337,45 @@ export default {
     // 系统参数 end
 
     productMaterialFeatureUpdate() {
-      console.log(this.characterLabelTags)
-      console.log(this.suitRoleTags)
-      console.log(this.productMaterialFeatureForm.recomStar)
-      console.log(this.productMaterialFeatureForm.featureState)
+      let characterLabelTagsStr = ''
+      let suitRoleTagsStr = ''
+      this.characterLabelTags.forEach((item, index) => {
+        if (index < this.characterLabelTags.length - 1) {
+          characterLabelTagsStr += item.text + ';'
+        } else {
+          characterLabelTagsStr += item.text
+        }
+      })
+      this.suitRoleTags.forEach((item, index) => {
+        if (index < this.suitRoleTags.length - 1) {
+          suitRoleTagsStr += item.text + ';'
+        } else {
+          suitRoleTagsStr += item.text
+        }
+      })
 
-      let param = {}
-      console.log(param)
-      return
+      let param = {
+        productId: this.productId,
+        characterLabelList: characterLabelTagsStr,
+        suitRoleList: suitRoleTagsStr,
+        featuresLabel: this.productMaterialFeatureForm.featureState,
+        recomStar: '' + this.productMaterialFeatureForm.recomStar
+      }
 
       this.$store.dispatch('ProductUpdateCharacter', param).then(res => {
-        console.log(res)
+        if (res.returnCode === '000000') {
+          this.$message({
+            showClose: true,
+            message: res.returnMsg,
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.returnMsg,
+            type: 'warning'
+          })
+        }
       })
     }
   }
