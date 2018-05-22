@@ -71,6 +71,83 @@
           </el-form-item>
         </el-form>
       </el-collapse-item>
+
+      <el-collapse-item name="5">
+        <template slot="title">
+          <span class="collapse-item-title">申请信息</span>
+        </template>
+        <el-form ref="productApply" :model="productApplyInfoForm" :label-position="labelPosition" label-width="120px">
+          <!-- <el-form-item label="产品申请流程">
+            <el-button class="btn-multi" v-for="(item, index) in productApplyInfoForm.applyProcessList" :key="index" @click="tagSelect(item, 'characterLabel')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+
+            <tag-input
+              name="applyProcess"
+              :list="productApplyInfoForm.applyProcessList" 
+              v-on:tagInputEmit="propertyConfigAddEvent">
+            </tag-input>
+
+            <div>
+              <el-tag
+                :key="tag.text"
+                v-for="tag in applyProcessTags"
+                closable
+                :disable-transitions="false"
+                @close="tagClose(tag, 'applyProcess')">
+                {{tag.text}}
+              </el-tag>
+            </div>
+          </el-form-item> -->
+          <el-form-item label="产品申请流程">
+
+          </el-form-item>
+
+          <el-form-item label="产品申请条件">
+            <el-button class="btn-multi" v-for="(item, index) in productApplyInfoForm.applyConditionList" :key="index" @click="tagSelect(item, 'applyCondition')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+
+            <tag-input
+              name="applyCondition"
+              :list="productApplyInfoForm.applyConditionList" 
+              v-on:tagInputEmit="propertyConfigAddEvent">
+            </tag-input>
+
+            <div>
+              <el-tag
+                :key="tag.text"
+                v-for="tag in applyConditionTags"
+                closable
+                :disable-transitions="false"
+                @close="tagClose(tag, 'applyCondition')">
+                {{tag.text}}
+              </el-tag>
+            </div>
+          </el-form-item>
+
+          <el-form-item label="产品申请材料">
+            <el-button class="btn-multi" v-for="(item, index) in productApplyInfoForm.applyMaterialsList" :key="index" @click="tagSelect(item, 'applyMaterials')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+
+            <tag-input
+              name="applyMaterials"
+              :list="productApplyInfoForm.applyMaterialsList" 
+              v-on:tagInputEmit="propertyConfigAddEvent">
+            </tag-input>
+
+            <div>
+              <el-tag
+                :key="tag.text"
+                v-for="tag in applyMaterialsTags"
+                closable
+                :disable-transitions="false"
+                @close="tagClose(tag, 'applyMaterials')">
+                {{tag.text}}
+              </el-tag>
+            </div>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" @click="productApplyInfoUpdate">保存</el-button>
+          </el-form-item>
+        </el-form>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
@@ -93,10 +170,15 @@ export default {
     return {
       activeNames: ['1'],
       labelPosition: 'right',
+      // 产品特性
       productMaterialFeatureForm: {},
       // recomStarVal: 3.5,
       characterLabelTags: [], // 已选系统参数的标签组合 -- 特性标签
       suitRoleTags: [], // 已选系统参数的标签组合 -- 适用人群
+      // 申请信息
+      productApplyInfoForm: {},
+      applyConditionTags: [], // 已选系统参数的标签组合 -- 产品申请条件流程
+      applyMaterialsTags: [], // 已选系统参数的标签组合 -- 产品申请材料流程
     }
   },
   computed: {
@@ -143,20 +225,20 @@ export default {
 
       data.forEach(item => {
         switch(item.property) {
-          case "character_label":
-            characterLabelList = item.propertyValueList
+          case "character_label": 
+            characterLabelList  = item.propertyValueList
             break
-          case "suit_role":
-            suitRoleList = item.propertyValueList
+          case "suit_role":       
+            suitRoleList        = item.propertyValueList
             break
-          case 'apply_process':
-            applyProcessList = item.propertyValueList
+          case 'apply_process':   
+            applyProcessList    = item.propertyValueList
             break
-          case 'apply_condition':
-            applyConditionList = item.propertyValueList
+          case 'apply_condition': 
+            applyConditionList  = item.propertyValueList
             break
-          case 'apply_materials':
-            applyMaterialsList = item.propertyValueList
+          case 'apply_materials': 
+            applyMaterialsList  = item.propertyValueList
             break
         }
       })
@@ -201,17 +283,22 @@ export default {
 
       this.handleListTags('characterLabel', characterLabelList, characterLabelTags)
       this.handleListTags('suitRole', suitRoleList, suitRoleTags)
+      this.handleListTags('applyCondition', applyConditionList, applyConditionTags)
+      this.handleListTags('applyMaterials', applyMaterialsList, applyMaterialsTags)
 
       this.productMaterialFeatureForm = {
         characterLabelList,
         suitRoleList,
-        applyProcessList,
-        applyConditionList,
-        applyMaterialsList,
         recomStar: parseFloat(recomStarTags[0]),
         featureState: featuresLabelTags[0]
       }
-      console.log(this.productMaterialFeatureForm.featureState[0])
+      this.productApplyInfoForm = {
+        applyProcessList,
+        applyConditionList,
+        applyMaterialsList
+      }
+      console.log(this.productMaterialFeatureForm)
+      console.log(this.productApplyInfoForm)
     },
     /**
      * @description 第一步初始化'所有的系统参数'；第二步根据'选定产品已有的系统参数'处理标签组合、系统参数列表
@@ -235,13 +322,25 @@ export default {
               text: tag,
               disabled: true
             })
-            break;
+            break
           case 'suitRole':
             this.suitRoleTags.push({
               text: tag,
               disabled: true
             })
-            break;
+            break
+          case 'applyCondition':
+            this.applyConditionTags.push({
+              text: tag,
+              disabled: true
+            })
+            break
+          case 'applyMaterials':
+            this.applyMaterialsTags.push({
+              text: tag,
+              disabled: true
+            })
+            break
         }
         list.forEach((item, index, arr) => {
           if (tag === item.text) {
@@ -262,6 +361,12 @@ export default {
           case 'suitRole':
             this.suitRoleTags.push(item)
             break
+          case 'applyCondition':
+            this.applyConditionTags.push(item)
+            break
+          case 'applyMaterials':
+            this.applyMaterialsTags.push(item)
+            break
         }
       }
     },
@@ -273,11 +378,19 @@ export default {
         case 'characterLabel':
           tagArr = this.characterLabelTags
           propertyConfigArr = this.productMaterialFeatureForm.characterLabelList
-          break;
+          break
         case 'suitRole':
           tagArr = this.suitRoleTags
           propertyConfigArr = this.productMaterialFeatureForm.suitRoleList
-          break;
+          break
+        case 'applyCondition':
+          tagArr = this.applyConditionTags
+          propertyConfigArr = this.productApplyInfoForm.applyConditionList
+          break
+        case 'applyMaterials':
+          tagArr = this.applyMaterialsTags
+          propertyConfigArr = this.productApplyInfoForm.applyMaterialsList
+          break
       }
 
       tagArr.splice(tagArr.indexOf(tag), 1)
@@ -377,6 +490,10 @@ export default {
           })
         }
       })
+    },
+    productApplyInfoUpdate() {
+      console.log(this.applyConditionTags)
+      console.log(this.applyMaterialsTags)
     }
   }
 }
@@ -388,5 +505,7 @@ export default {
   margin-left: 0 !important;
   margin-right: 10px;
   margin-bottom: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 </style>
