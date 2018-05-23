@@ -57,8 +57,8 @@ export default {
           }
         }
       }
-      this.inputVisible = false;
-      this.inputValue = '';
+      this.inputVisible = false
+      this.inputValue = ''
     }
   }
 }

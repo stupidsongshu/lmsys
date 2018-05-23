@@ -63,14 +63,15 @@ export default {
         this.btnNext = true
       }
 
-      switch(step) {
-        case 1:
-          this.$router.push({name: 'productMaterialStep' + step})
-          break
-        case 2:
-          this.$router.push({name: 'productMaterialStep' + step})
-          break
-      }
+      // switch(step) {
+      //   case 1:
+      //     this.$router.push({name: 'productMaterialStep' + step})
+      //     break
+      //   case 2:
+      //     this.$router.push({name: 'productMaterialStep' + step})
+      //     break
+      // }
+      this.$router.push({name: 'productMaterialStep' + step})
     }
   },
   methods: {

@@ -258,14 +258,14 @@ export default {
         } else {
           let instalPeriodList = this.productMaterialFeeForm.instalPeriodList.trim().replace(/；/g, ';')
           let param = {
-            productId          : this.productId,
-            minCreLine         : parseInt(this.productMaterialFeeForm.minCreLine),//产品最小额度
-            maxCreLine         : parseInt(this.productMaterialFeeForm.maxCreLine),//产品最大额度
-            interestRateType   : parseInt(this.productMaterialFeeForm.interestRateType),//产品利率类型
-            interestRate       : parseFloat(this.productMaterialFeeForm.interestRate),//产品利率
-            instalType         : parseInt(this.productMaterialFeeForm.instalType),//产品分期类型
+            productId:        this.productId,
+            minCreLine:       parseInt(this.productMaterialFeeForm.minCreLine),//产品最小额度
+            maxCreLine:       parseInt(this.productMaterialFeeForm.maxCreLine),//产品最大额度
+            interestRateType: parseInt(this.productMaterialFeeForm.interestRateType),//产品利率类型
+            interestRate:     parseFloat(this.productMaterialFeeForm.interestRate),//产品利率
+            instalType:       parseInt(this.productMaterialFeeForm.instalType),//产品分期类型
             instalPeriodList,//产品分期期数(只能以数字开头和结尾,中间只能是英文分号和数字的组合)
-            instalReturnType   : parseInt(this.productMaterialFeeForm.instalReturnType)//产品分期归还类型
+            instalReturnType: parseInt(this.productMaterialFeeForm.instalReturnType)//产品分期归还类型
           }
 
           this.$store.dispatch('ProductUpdateFee', param).then(res => {
