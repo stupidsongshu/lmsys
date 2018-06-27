@@ -6,7 +6,10 @@ const user = {
     userInfo: getUserInfo()
   },
   mutations: {
-    SET_USERINFO: (state, userInfo) => state.userInfo = userInfo
+    SET_USERINFO: (state, userInfo) => state.userInfo = userInfo,
+    DEL_USERINFO: _ => {
+      removeUserInfo()
+    }
   },
   actions: {
     Login: ({ commit }, userInfo) => {
@@ -27,8 +30,7 @@ const user = {
     },
     LogOut({ commit }) {
       return new Promise((resolve, reject) => {
-        commit('SET_USERINFO', '')
-        removeUserInfo()
+        commit('DEL_USERINFO')
         resolve()
       })
     }

@@ -1,4 +1,9 @@
-import { partnerList, partnerFind, partnerAdd, partnerUpdate } from '@/api/partner'
+import {
+  partnerList,
+  partnerFind,
+  partnerAdd,
+  partnerUpdate
+} from '@/api/partner'
 
 const partner = {
   state: {},

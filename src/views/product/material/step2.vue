@@ -7,7 +7,15 @@
         </template>
         <el-form ref="productMaterialFeature" :model="productMaterialFeatureForm" :label-position="labelPosition" label-width="120px">
           <el-form-item label="特性标签">
-            <el-button class="btn-multi" v-for="(item, index) in productMaterialFeatureForm.characterLabelList" :key="index" @click="tagSelect(item, 'characterLabel')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+            <el-button
+              class="btn-multi"
+              v-for="(item, index) in productMaterialFeatureForm.characterLabelList"
+              :key="index"
+              @click="tagSelect(item, 'characterLabel')"
+              :disabled="item.disabled"
+              :value="item.text">
+              {{item.text}}
+            </el-button>
 
             <tag-input
               name="characterLabel"
@@ -28,7 +36,15 @@
           </el-form-item>
 
           <el-form-item label="适用人群" prop="suitRole">
-            <el-button class="btn-multi" v-for="(item, index) in productMaterialFeatureForm.suitRoleList" :key="index" @click="tagSelect(item, 'suitRole')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+            <el-button
+              class="btn-multi"
+              v-for="(item, index) in productMaterialFeatureForm.suitRoleList"
+              :key="index"
+              @click="tagSelect(item, 'suitRole')"
+              :disabled="item.disabled"
+              :value="item.text">
+              {{item.text}}
+            </el-button>
 
             <tag-input
               name="suitRole"
@@ -78,7 +94,14 @@
         </template>
         <el-form ref="productApply" :model="productApplyInfoForm" :label-position="labelPosition" label-width="120px">
           <!-- <el-form-item label="产品申请流程">
-            <el-button class="btn-multi" v-for="(item, index) in productApplyInfoForm.applyProcessList" :key="index" @click="tagSelect(item, 'characterLabel')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+            <el-button
+              class="btn-multi"
+              v-for="(item, index) in productApplyInfoForm.applyProcessList"
+              :key="index" @click="tagSelect(item, 'characterLabel')"
+              :disabled="item.disabled"
+              :value="item.text">
+              {{item.text}}
+            </el-button>
 
             <tag-input
               name="applyProcess"
@@ -98,11 +121,20 @@
             </div>
           </el-form-item> -->
           <el-form-item label="产品申请流程">
-
+            <div>
+              <span class="apply-process-item" v-for="(item, index) in productApplyInfoForm.applyProcessList" :key="index"><img :src="'../../../assets/images/applyProcess/' + item + '.png'" alt=""></span>
+            </div>
           </el-form-item>
 
           <el-form-item label="产品申请条件">
-            <el-button class="btn-multi" v-for="(item, index) in productApplyInfoForm.applyConditionList" :key="index" @click="tagSelect(item, 'applyCondition')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+            <el-button class="btn-multi"
+              v-for="(item, index) in productApplyInfoForm.applyConditionList"
+              :key="index"
+              @click="tagSelect(item, 'applyCondition')"
+              :disabled="item.disabled"
+              :value="item.text">
+              {{item.text}}
+            </el-button>
 
             <tag-input
               name="applyCondition"
@@ -123,7 +155,15 @@
           </el-form-item>
 
           <el-form-item label="产品申请材料">
-            <el-button class="btn-multi" v-for="(item, index) in productApplyInfoForm.applyMaterialsList" :key="index" @click="tagSelect(item, 'applyMaterials')" :disabled="item.disabled" :value="item.text">{{item.text}}</el-button>
+            <el-button
+              class="btn-multi"
+              v-for="(item, index) in productApplyInfoForm.applyMaterialsList"
+              :key="index"
+              @click="tagSelect(item, 'applyMaterials')"
+              :disabled="item.disabled"
+              :value="item.text">
+              {{item.text}}
+            </el-button>
 
             <tag-input
               name="applyMaterials"
@@ -174,7 +214,7 @@ export default {
       productMaterialFeatureForm: {},
       // recomStarVal: 3.5,
       characterLabelTags: [], // 已选系统参数的标签组合 -- 特性标签
-      suitRoleTags: [], // 已选系统参数的标签组合 -- 适用人群
+      suitRoleTags: [],       // 已选系统参数的标签组合 -- 适用人群
       // 申请信息
       productApplyInfoForm: {},
       applyConditionTags: [], // 已选系统参数的标签组合 -- 产品申请条件流程
@@ -302,9 +342,9 @@ export default {
     },
     /**
      * @description 第一步初始化'所有的系统参数'；第二步根据'选定产品已有的系统参数'处理标签组合、系统参数列表
-     * @param name 需要处理的系统参数
-     * @param list 所有的系统参数
-     * @param tags 选定产品已有的系统参数
+     * @param {String} name 需要处理的系统参数
+     * @param {Array}  list 所有的系统参数
+     * @param {Array}  tags 选定产品已有的系统参数
      */
     handleListTags(name, list, tags) {
       // 第一步初始化'所有的系统参数'
@@ -492,8 +532,25 @@ export default {
       })
     },
     productApplyInfoUpdate() {
-      console.log(this.applyConditionTags)
-      console.log(this.applyMaterialsTags)
+      let applyConditionTagsStr = ''
+      let applyMaterialsTagsStr = ''
+      this.applyConditionTags.forEach((item, index) => {
+        if (index < this.applyConditionTags.length - 1) {
+          applyConditionTagsStr += item.text + ';'
+        } else {
+          applyConditionTagsStr += item.text
+        }
+      })
+      this.applyMaterialsTags.forEach((item, index) => {
+        if (index < this.applyMaterialsTags.length - 1) {
+          applyMaterialsTagsStr += item.text + ';'
+        } else {
+          applyMaterialsTagsStr += item.text
+        }
+      })
+
+      console.log(applyConditionTagsStr)
+      console.log(applyMaterialsTagsStr)
     }
   }
 }
@@ -507,5 +564,16 @@ export default {
   margin-bottom: 10px;
   padding-left: 5px;
   padding-right: 5px;
+}
+.apply-process-item {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  margin-right: 4px;
+  padding: 4px;
+  border: 2px dotted #999;
+  &>img {
+   width: 100%;
+  }
 }
 </style>
