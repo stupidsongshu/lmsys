@@ -1,13 +1,13 @@
 import {
-	productList,
-	productUpdateStatus,
-	productUpdateShow,
-	productFind,
-	productCreate,
-	productUpdateFee,
-	propertyConfigGet,
-	propertyConfigAdd,
-	productUpdateCharacter
+  productList,
+  productUpdateStatus,
+  productUpdateShow,
+  productFind,
+  productCreate,
+  productUpdateFee,
+  propertyConfigGet,
+  propertyConfigAdd,
+  productUpdateCharacter
 } from '@/api/product'
 
 const product = {

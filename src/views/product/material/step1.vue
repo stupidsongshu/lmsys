@@ -46,6 +46,22 @@
         <template slot="title">
           <span class="collapse-item-title">图标</span>
         </template>
+        <el-upload
+          class="upload-demo"
+          ref="fileUpload"
+          drag
+          :auto-upload="false"
+          :multiple="false"
+          :on-preview="handlePreview"
+          accept="image/*"
+          :action="fileUploadUrl"
+          :http-request="fileUploadFn">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+        <div><img :src="fileUploadImg" width="100" alt=""></div>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
       </el-collapse-item>
       <el-collapse-item name="3">
         <template slot="title">
@@ -103,6 +119,9 @@
 <script>
 import { isEmptyStr } from '@/utils/validate'
 import { mapGetters } from 'vuex'
+import api from '../../../api/api.js'
+import config from '../../../config.js'
+import md5 from 'blueimp-md5'
 
 export default {
   props: {
@@ -154,12 +173,15 @@ export default {
         instalType:       [{required: true, validator: validateIsEmptyStr, trigger: 'change'}],
         instalPeriodList: [{required: true, validator: validateInstalPeriodList, trigger: ['change', 'blur']}],
         instalReturnType: [{required: true, validator: validateIsEmptyStr, trigger: 'change'}]
-      }
+      },
+      fileUploadUrl: api.fileUpload,
+      fileUploadImg: ''
     }
   },
   computed: {
     ...mapGetters([
-      'productId'
+      'productId',
+      'userInfo'
     ]),
     baseInfoBtnTxt() {
       if (!this.productId) {
@@ -196,6 +218,7 @@ export default {
         instalPeriodList: product.instalPeriodList,
         instalReturnType: product.instalReturnType
       }
+      this.fileUploadImg = product.productIconLink
     }
   },
   methods: {
@@ -285,6 +308,70 @@ export default {
           })
         }
       })
+    },
+
+    fileUploadFn() {
+      let fileList = this.$refs.fileUpload.uploadFiles
+      if (fileList.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请选择文件',
+          type: 'warning'
+        })
+        return
+      }
+      let file = fileList[0]
+      if (file.size / 1024 > 500) {
+        this.$message({
+          showClose: true,
+          message: '文件大小不能超过500kb',
+          type: 'warning'
+        })
+        return
+      }
+
+      let fd = new FormData()
+      let userInfo = JSON.parse(this.userInfo)
+      let productId = this.productId
+      let ua = config.ua
+      let signKey = config.signKey
+      let call = 'File.uploadIcon'
+      let timestamp = new Date().getTime()
+      let sign = md5(ua + "&" + call + "&" + timestamp + "&" + signKey)
+
+      fd.append("ua", ua)
+			fd.append("call", call)
+			fd.append("args", JSON.stringify({
+				account: userInfo.account,
+				token: userInfo.token,
+				productId: productId,
+				fileType: 'icon'
+			}))
+			fd.append("sign", sign)
+			fd.append("timestamp", timestamp)
+      fd.append("icon", file.raw)
+
+      let xhr = new XMLHttpRequest()
+      xhr.open("POST", this.fileUploadUrl, true)
+      let _this = this
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          var data = JSON.parse(xhr.responseText);
+          _this.$message({
+            message: data.returnMsg
+          })
+          if (data.returnCode === '000000') {
+            _this.fileUploadImg = data.response
+          }
+        }
+      }
+      xhr.send(fd)
+    },
+    submitUpload() {
+      this.fileUploadFn()
+    },
+    handlePreview(file) {
+      console.log(file)
     }
   }
 }

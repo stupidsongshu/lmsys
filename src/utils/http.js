@@ -13,15 +13,15 @@ console.log(store)
 export default function httpSign(options) {
   let url = options.url
   let call = options.call
-  let method = options.method || 'post'
   let data = options.data || {}
+  let method = options.method || 'post'
 
   let ua = config.ua
   let signKey = config.signKey
   let cryptoKey = config.cryptoKey
   let cryptoIv = config.cryptoIv
   let timestamp = new Date().getTime()
-  let sign =  md5(ua + "&" + call + "&" + timestamp + "&" + signKey)
+  let sign = md5(ua + "&" + call + "&" + timestamp + "&" + signKey)
 
   let commonArgs = {}
   let userInfo = getUserInfo()
@@ -66,7 +66,8 @@ export default function httpSign(options) {
     })
 
     axios({
-      url: process.env.BASE_API + url,
+      // url: process.env.BASE_API + url,
+      url: url,
       method: method,
       data: encrypted.toString()
     }).then(res => {
@@ -85,7 +86,7 @@ export default function httpSign(options) {
       // } else {
       //   reject(resData)
       // }
-  
+
       // return new Promise((resolve, reject) => {
       //   let resData = JSON.parse(CryptoJS.enc.Utf8.stringify(decrypted).toString())
       //   if (resData.returnCode === '000000') {
@@ -98,7 +99,7 @@ export default function httpSign(options) {
       // })
     }).catch(err => {
       console.log(err)
-      loading.close()
+      loadingInstance.close()
     })
   })
 

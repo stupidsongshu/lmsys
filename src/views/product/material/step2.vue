@@ -19,7 +19,7 @@
 
             <tag-input
               name="characterLabel"
-              :list="productMaterialFeatureForm.characterLabelList" 
+              :list="productMaterialFeatureForm.characterLabelList"
               v-on:tagInputEmit="propertyConfigAddEvent">
             </tag-input>
 
@@ -103,12 +103,6 @@
               {{item.text}}
             </el-button>
 
-            <tag-input
-              name="applyProcess"
-              :list="productApplyInfoForm.applyProcessList" 
-              v-on:tagInputEmit="propertyConfigAddEvent">
-            </tag-input>
-
             <div>
               <el-tag
                 :key="tag.text"
@@ -121,8 +115,26 @@
             </div>
           </el-form-item> -->
           <el-form-item label="产品申请流程">
+            <span
+              class="process-img-container"
+              :class="{'selected': item.disabled}"
+              v-for="(item, index) in productApplyInfoForm.applyProcessList"
+              :key="index"
+              @click="tagSelect(item, 'applyProcess')"
+              :disabled="item.disabled">
+              <img class="process-img" :src="'../../../../static/process/' + item.text + '.png'" alt="">
+            </span>
+
             <div>
-              <span class="apply-process-item" v-for="(item, index) in productApplyInfoForm.applyProcessList" :key="index"><img :src="'../../../assets/images/applyProcess/' + item + '.png'" alt=""></span>
+              <el-tag
+                class="process-tag"
+                v-for="tag in applyProcessTags"
+                :key="tag.text"
+                closable
+                :disable-transitions="false"
+                @close="tagClose(tag, 'applyProcess')">
+                <img class="process-img" :src="'../../../../static/process/' + tag.text + '.png'" alt="">
+              </el-tag>
             </div>
           </el-form-item>
 
@@ -138,7 +150,7 @@
 
             <tag-input
               name="applyCondition"
-              :list="productApplyInfoForm.applyConditionList" 
+              :list="productApplyInfoForm.applyConditionList"
               v-on:tagInputEmit="propertyConfigAddEvent">
             </tag-input>
 
@@ -167,7 +179,7 @@
 
             <tag-input
               name="applyMaterials"
-              :list="productApplyInfoForm.applyMaterialsList" 
+              :list="productApplyInfoForm.applyMaterialsList"
               v-on:tagInputEmit="propertyConfigAddEvent">
             </tag-input>
 
@@ -217,8 +229,9 @@ export default {
       suitRoleTags: [],       // 已选系统参数的标签组合 -- 适用人群
       // 申请信息
       productApplyInfoForm: {},
-      applyConditionTags: [], // 已选系统参数的标签组合 -- 产品申请条件流程
-      applyMaterialsTags: [], // 已选系统参数的标签组合 -- 产品申请材料流程
+      applyConditionTags: [], // 已选系统参数的标签组合 -- 产品申请条件
+      applyMaterialsTags: [], // 已选系统参数的标签组合 -- 产品申请材料
+      applyProcessTags: []    // 已选系统参数的标签组合 -- 产品申请流程
     }
   },
   computed: {
@@ -265,19 +278,19 @@ export default {
 
       data.forEach(item => {
         switch(item.property) {
-          case "character_label": 
+          case "character_label":
             characterLabelList  = item.propertyValueList
             break
-          case "suit_role":       
+          case "suit_role":
             suitRoleList        = item.propertyValueList
             break
-          case 'apply_process':   
+          case 'apply_process':
             applyProcessList    = item.propertyValueList
             break
-          case 'apply_condition': 
+          case 'apply_condition':
             applyConditionList  = item.propertyValueList
             break
-          case 'apply_materials': 
+          case 'apply_materials':
             applyMaterialsList  = item.propertyValueList
             break
         }
@@ -325,6 +338,7 @@ export default {
       this.handleListTags('suitRole', suitRoleList, suitRoleTags)
       this.handleListTags('applyCondition', applyConditionList, applyConditionTags)
       this.handleListTags('applyMaterials', applyMaterialsList, applyMaterialsTags)
+      this.handleListTags('applyProcess', applyProcessList, applyProcessTags)
 
       this.productMaterialFeatureForm = {
         characterLabelList,
@@ -381,6 +395,12 @@ export default {
               disabled: true
             })
             break
+          case 'applyProcess':
+            this.applyProcessTags.push({
+              text: tag,
+              disabled: true
+            })
+            break
         }
         list.forEach((item, index, arr) => {
           if (tag === item.text) {
@@ -407,6 +427,9 @@ export default {
           case 'applyMaterials':
             this.applyMaterialsTags.push(item)
             break
+          case 'applyProcess':
+            this.applyProcessTags.push(item)
+            break
         }
       }
     },
@@ -430,6 +453,10 @@ export default {
         case 'applyMaterials':
           tagArr = this.applyMaterialsTags
           propertyConfigArr = this.productApplyInfoForm.applyMaterialsList
+          break
+        case 'applyProcess':
+          tagArr = this.applyProcessTags
+          propertyConfigArr = this.productApplyInfoForm.applyProcessList
           break
       }
 
@@ -565,15 +592,25 @@ export default {
   padding-left: 5px;
   padding-right: 5px;
 }
-.apply-process-item {
+.process-img-container {
   display: inline-block;
-  width: 40px;
-  height: 40px;
-  margin-right: 4px;
-  padding: 4px;
-  border: 2px dotted #999;
-  &>img {
-   width: 100%;
-  }
+  margin-right: 10px;
+  padding: 5px;
+  line-height: 1;
+  cursor: pointer;
+}
+.process-img {
+  width: 60px;
+}
+.process-tag {
+  height: auto;
+  margin-right: 10px;
+  padding: 5px;
+  line-height: 1;
+}
+.selected {
+  border: 2px dashed #dcdfe6;
+  background-color: #e8f4ff;
+  cursor: not-allowed;
 }
 </style>
