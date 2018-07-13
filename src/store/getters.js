@@ -1,5 +1,6 @@
 const getters = {
   sidebar: state => state.app.sidebar,
+  language: state => state.app.language,
   userInfo: state => state.user.userInfo,
   productId: state => state.product.productId,
   // token: state => state.user.token,
