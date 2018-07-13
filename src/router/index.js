@@ -7,12 +7,12 @@ import Layout from '@/views/layout/Layout'
 
 export default new Router({
   routes: [
-    { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+    { path: '/login', name: 'login', component: () => import('@/views/login/index'), hidden: true },
     {
       path: '',
       component: Layout,
       redirect: '/dashboard',
-      name: 'Dashboard',
+      name: 'dashboard',
       meta: { title: 'Dash' },
       // hidden: true,
       children: [
@@ -28,7 +28,7 @@ export default new Router({
       component: Layout,
       redirect: '/product/list',
       name: 'product',
-      meta: { title: 'Product' },
+      meta: { title: 'Product', icon: 'product' },
       children: [
         {
           path: 'list',
@@ -65,7 +65,7 @@ export default new Router({
       component: Layout,
       redirect: '/partner/list',
       name: 'partner',
-      meta: { title: 'Partner' },
+      meta: { title: 'Partner', icon: 'partner' },
       children: [
         {
           path: 'list',

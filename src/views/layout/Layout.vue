@@ -17,10 +17,6 @@ export default {
     ...mapGetters([
       'sidebar'
     ])
-
-    // sidebar() {
-    //   return this.$store.state.app.sidebar
-    // }
   }
 }
 </script>

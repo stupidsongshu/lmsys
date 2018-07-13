@@ -50,8 +50,12 @@ export default {
         password: [{ required: true, trigger: 'blur', message: '密码不能为空', validator: validateIsEmptyStr }]
       },
       loading: false,
-      pwdType: 'password'
+      pwdType: 'password',
+      redirect: ''
     }
+  },
+  mounted() {
+    this.redirect = this.$route.query.redirect
   },
   methods: {
     showPwd() {
@@ -80,7 +84,12 @@ export default {
                 type: 'warning'
               })
             }
-            this.$router.push({ path: '/dashboard' })
+
+            if (!!this.redirect) {
+              this.$router.push({path: this.redirect})
+            } else {
+              this.$router.push({ name: 'dashboard' })
+            }
           }).catch((err) => {
             this.loading = false
             console.log(err)
