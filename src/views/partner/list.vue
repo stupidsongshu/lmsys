@@ -2,35 +2,35 @@
   <div class="main-wrapper">
     <el-table :data="partnerList" border stripe highlight-current-row style="width: 100%">
       <el-table-column prop="partnerId" label="id"></el-table-column>
-      <el-table-column prop="partnerCompany" label="合作方名称"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="partnerCompany" :label="$t('partner.partnerCompanyName')"></el-table-column>
+      <el-table-column :label="$t('partner.operate')">
         <template slot-scope="scope">
-          <el-button @click.native.prevent="partnerFind(scope.row.partnerId)" size="small">修改</el-button>
+          <el-button @click.native.prevent="partnerFind(scope.row.partnerId)" size="small">{{$t('partner.modify')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog title="修改合作方" :visible.sync="dialogFormVisible">
-      <el-form :model="form" ref="partnerEditForm" :rules="rules" :label-position="labelPosition" label-width="100px">
+    <el-dialog :title="$t('partner.modifyPartner')" :visible.sync="dialogFormVisible">
+      <el-form :model="form" ref="partnerEditForm" :rules="rules" :label-position="labelPosition" label-width="150px">
         <el-form-item style="display:none;">
           <el-input v-model="form.partnerId"></el-input>
         </el-form-item>
-        <el-form-item label="合作方名称" prop="partnerCompany">
+        <el-form-item :label="$t('partner.partnerCompanyName')" prop="partnerCompany">
           <el-input v-model="form.partnerCompany"></el-input>
         </el-form-item>
-        <el-form-item label="联系人">
+        <el-form-item :label="$t('partner.contactPerson')">
           <el-input v-model="form.partnerContactName"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话">
+        <el-form-item :label="$t('partner.contactPhone')">
           <el-input v-model="form.partnerContactPhone"></el-input>
         </el-form-item>
-        <el-form-item label="联系邮箱">
+        <el-form-item :label="$t('partner.contactEmail')">
           <el-input v-model="form.partnerContactEmail"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="partnerUpdate">确 定</el-button>
+        <el-button @click="dialogFormVisible = false">{{$t('partner.cancel')}}</el-button>
+        <el-button type="primary" @click="partnerUpdate">{{$t('partner.ensure')}}</el-button>
       </div>
     </el-dialog>
   </div>

@@ -1,23 +1,23 @@
 <template>
   <div class="main-wrapper">
-    <el-form ref="partnerForm" :model="form" :rules="rules" :label-position="labelPosition" label-width="120px">
-      <el-form-item label="合作方名称" prop="partnerCompany">
+    <el-form ref="partnerForm" :model="form" :rules="rules" :label-position="labelPosition" label-width="150px">
+      <el-form-item :label="$t('partner.partnerCompanyName')" prop="partnerCompany">
         <el-input v-model="form.partnerCompany"></el-input>
       </el-form-item>
-      <el-form-item label="公司主页" prop="partnerWebsite">
+      <el-form-item :label="$t('partner.companyWebsite')" prop="partnerWebsite">
         <el-input v-model="form.partnerWebsite"></el-input>
       </el-form-item>
-      <el-form-item label="联系人">
+      <el-form-item :label="$t('partner.contactPerson')">
         <el-input v-model="form.partnerContactName"></el-input>
       </el-form-item>
-      <el-form-item label="联系电话">
+      <el-form-item :label="$t('partner.contactPhone')">
         <el-input v-model="form.partnerContactPhone"></el-input>
       </el-form-item>
-      <el-form-item label="联系邮箱">
+      <el-form-item :label="$t('partner.contactEmail')">
         <el-input v-model="form.partnerContactEmail"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">保存</el-button>
+        <el-button type="primary" @click="onSubmit">{{$t('partner.save')}}</el-button>
       </el-form-item>
     </el-form>
 

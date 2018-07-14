@@ -1,25 +1,42 @@
 <template>
   <div>
-    <h1>{{$t('message')}} {{account}}</h1>
+    <img src="../../assets/images/avatar.jpg" alt="">
+    <h1>{{account}}, {{$t('greeting.' + timeFlag)}}！</h1>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Locale from './locale.js'
 
 export default {
   data() {
     return {
-      account: ''
+      account: '',
+      timeFlag: ''
     }
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters([
+      'userInfo',
+      'language'
+    ])
   },
-  mounted() {
+  created() {
     this.account = JSON.parse(this.userInfo).account
-    // console.log(this.$i18n.getLocaleMessage)
-    // console.log(this.$i18n.mergeLocaleMessage)
+
+    if (this.$i18n.getLocaleMessage(this.language)['greeting'] === undefined) {
+      this.$i18n.mergeLocaleMessage(this.language, Locale[this.language])
+    }
+
+    const hour = new Date().getHours()
+    if (hour >= 0 && hour < 12) {
+      this.timeFlag = 'morning'
+    } else if (hour >=12 && hour < 18) {
+      this.timeFlag = 'afternoon'
+    } else if (hour >= 18 && hour <=23) {
+      this.timeFlag = 'evening'
+    }
   }
 }
 </script>

@@ -2,19 +2,19 @@
   <div class="main-wrapper">
     <el-row>
       <el-col :span="12">
-        <el-button type="primary" icon="el-icon-arrow-left" size="small" @click="toProductList">返回产品列表</el-button>
+        <el-button type="primary" icon="el-icon-arrow-left" size="small" @click="toProductList">{{$t('product.backToProductList')}}</el-button>
       </el-col>
       <el-col :span="12" style="text-align: right;">
         <el-button-group>
-          <el-button type="primary" icon="el-icon-arrow-left" size="small" @click="changeStep('prev')" :disabled="btnPrev">上一步</el-button>
-          <el-button type="primary" size="small" @click="changeStep('next')" :disabled="btnNext">下一步<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+          <el-button type="primary" icon="el-icon-arrow-left" size="small" @click="changeStep('prev')" :disabled="btnPrev">{{$t('product.previousStep')}}</el-button>
+          <el-button type="primary" size="small" @click="changeStep('next')" :disabled="btnNext">{{$t('product.nextStep')}}<i class="el-icon-arrow-right el-icon--right"></i></el-button>
         </el-button-group>
       </el-col>
     </el-row>
 
     <el-steps :active="activeStep" simple>
-      <el-step title="创建应用" icon="el-icon-edit"></el-step>
-      <el-step title="完善信息" icon="el-icon-edit"></el-step>
+      <el-step :title="$t('product.createProduct')" icon="el-icon-edit"></el-step>
+      <el-step :title="$t('product.completeInfo')" icon="el-icon-edit"></el-step>
     </el-steps>
 
     <router-view v-if="!productId"></router-view>

@@ -1,29 +1,29 @@
 <template>
   <div class="main-wrapper">
 		<el-button-group>
-			<el-button type="primary" @click="toProductMaterial()">添加应用</el-button>
+			<el-button type="primary" @click="toProductMaterial()">{{$t('product.addProduct')}}</el-button>
 		</el-button-group>
 
     <el-table :data="productList" border stripe highlight-current-row style="width: 100%">
       <el-table-column prop="id" label="id"></el-table-column>
-      <el-table-column label="应用名称">
+      <el-table-column :label="$t('product.productName')">
 				<template slot-scope="scope">
 					<img :src="scope.row.productIconLink" class="icon-name" /> {{scope.row.productName}}
 				</template>
 			</el-table-column>
-      <el-table-column prop="productStatus" label="上线状态" :filters="[{ text: '已下线', value: 0 }, { text: '已上线', value: 1 }]" :filter-method="productStatusFilter">
+      <el-table-column prop="productStatus" :label="$t('product.onlineStatus')" :filters="[{ text: $t('product.offline'), value: 0 }, { text: $t('product.online'), value: 1 }]" :filter-method="productStatusFilter">
 				<template slot-scope="scope">
 					<span @click="toggleProductStatus(scope)">
 						<span class="offline" v-if="scope.row.productStatus === 0">
-							<img :src="iconOffline" alt=""> 已下线
+							<img :src="iconOffline" alt=""> {{$t('product.offline')}}
 						</span>
 						<span class="online" v-else-if="scope.row.productStatus === 1">
-							<img :src="iconOnline" alt=""> 已上线
+							<img :src="iconOnline" alt=""> {{$t('product.online')}}
 						</span>
 					</span>
 				</template>
 			</el-table-column>
-      <el-table-column prop="platformShow" label="是否展示">
+      <el-table-column prop="platformShow" :label="$t('product.showOrNot')">
 				<template slot-scope="scope">
 					<span @click="toggleProductPlatformShow($event, scope.row)">
 						<span class="khw" v-show="scope.row.platformShow.khwShow === undefined || scope.row.platformShow.khwShow === 0"><img class="icon-platformShow" :src="iconEyeClose"> 卡还王</span>
@@ -37,9 +37,9 @@
 					</span>
         </template>
 			</el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('product.operate')">
         <template slot-scope="scope">
-          <el-button @click.native.prevent="toProductMaterial(scope.row.productId)" size="small">修改</el-button>
+          <el-button @click.native.prevent="toProductMaterial(scope.row.productId)" size="small">{{$t('product.modify')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -109,7 +109,7 @@ export default {
 		},
 		// 切换产品特定展示状态
 		toggleProductPlatformShow(e, product) {
-			let platformName = e.target.getAttribute('class')			
+			let platformName = e.target.getAttribute('class')
 
 			// khwShow为undefined或0时表示在卡还王上不展示，为1时表示在卡还王上展示
 			let khwShow = product.platformShow.khwShow === undefined ? 0 : product.platformShow.khwShow

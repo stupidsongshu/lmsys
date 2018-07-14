@@ -3,28 +3,28 @@
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item name="1">
         <template slot="title">
-          <span class="collapse-item-title">基本信息</span>
+          <span class="collapse-item-title">{{$t('product.basicInfo')}}</span>
         </template>
         <el-form ref="productMaterialBaseInfo" :model="productMaterialBaseInfoForm" :rules="productMaterialBaseInfoRules" :label-position="labelPosition" label-width="120px">
-          <el-form-item label="产品名称" prop="productName">
+          <el-form-item :label="$t('product.productName')" prop="productName">
             <el-input v-model="productMaterialBaseInfoForm.productName"></el-input>
           </el-form-item>
 
-          <el-form-item label="产品包名" prop="packageName">
+          <el-form-item :label="$t('product.productPackageName')" prop="packageName">
             <el-input v-model="productMaterialBaseInfoForm.packageName"></el-input>
           </el-form-item>
 
-          <el-form-item label="产品二级标题" prop="productSubTitle">
+          <el-form-item :label="$t('product.productSubTitle')" prop="productSubTitle">
             <el-input v-model="productMaterialBaseInfoForm.productSubTitle"></el-input>
           </el-form-item>
 
-          <el-form-item label="产品提供方" prop="partnerId">
+          <el-form-item :label="$t('product.productProvider')" prop="partnerId">
             <el-select v-model="productMaterialBaseInfoForm.partnerId" placeholder="请选择产品提供方" style="width: 100%;">
               <el-option v-for="(val, index) in partnerList" :label="val.partnerCompany" :value="val.partnerId" :key="index"></el-option>
             </el-select>
           </el-form-item>
 
-          <el-form-item label="产品类型" prop="productTypeId">
+          <el-form-item :label="$t('product.productType')" prop="productTypeId">
             <el-select v-model="productMaterialBaseInfoForm.productTypeId" placeholder="请选择产品类型" style="width: 100%;">
               <el-option label="现金贷"   :value="1"></el-option>
               <el-option label="还信用卡" :value="2"></el-option>
@@ -33,18 +33,18 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="H5注册链接" prop="h5ApplyUrl">
+          <el-form-item :label="$t('product.h5RegisterLink')" prop="h5ApplyUrl">
             <el-input v-model="productMaterialBaseInfoForm.h5ApplyUrl"></el-input>
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="productMaterialBaseInfoUpdate">{{baseInfoBtnTxt}}</el-button>
+            <el-button type="primary" @click="productMaterialBaseInfoUpdate">{{!productId ? $t('product.createProduct') : $t('product.updateProduct')}}</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
       <el-collapse-item name="2">
         <template slot="title">
-          <span class="collapse-item-title">图标</span>
+          <span class="collapse-item-title">{{$t('product.icon')}}</span>
         </template>
         <el-upload
           class="upload-demo"
@@ -57,58 +57,58 @@
           :action="fileUploadUrl"
           :http-request="fileUploadFn">
           <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+          <div class="el-upload__text">{{$t('product.uploadHint1')}}<em>{{$t('product.uploadHint2')}}</em></div>
+          <div class="el-upload__tip" slot="tip">{{$t('product.iconCondition')}}</div>
         </el-upload>
         <div><img :src="fileUploadImg" width="100" alt=""></div>
-        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">{{$t('product.uploadToServer')}}</el-button>
       </el-collapse-item>
       <el-collapse-item name="3">
         <template slot="title">
-          <span class="collapse-item-title">利率分期额度</span>
+          <span class="collapse-item-title">{{$t('product.interestRateLimit')}}</span>
         </template>
-        <el-form ref="productMaterialFee" :model="productMaterialFeeForm" :rules="productMaterialFeeRules" :label-position="labelPosition" label-width="120px">
-          <el-form-item label="产品最小额度" prop="minCreLine">
+        <el-form ref="productMaterialFee" :model="productMaterialFeeForm" :rules="productMaterialFeeRules" :label-position="labelPosition" label-width="150px">
+          <el-form-item :label="$t('product.minLimit')" prop="minCreLine">
             <el-input type="number" v-model.number="productMaterialFeeForm.minCreLine" placeholder="单位：元"></el-input>
           </el-form-item>
 
-          <el-form-item label="产品最大额度" prop="maxCreLine">
+          <el-form-item :label="$t('product.maxLimit')" prop="maxCreLine">
             <el-input type="number" v-model.number="productMaterialFeeForm.maxCreLine" placeholder="单位：元"></el-input>
           </el-form-item>
 
-          <el-form-item label="产品利率类型" prop="interestRateType">
+          <el-form-item :label="$t('product.interestRateType')" prop="interestRateType">
             <el-radio-group v-model="productMaterialFeeForm.interestRateType">
-              <el-radio-button label="0">日</el-radio-button>
-              <el-radio-button label="1">月</el-radio-button>
-              <el-radio-button label="2">年</el-radio-button>
+              <el-radio-button label="0">{{$t('product.day')}}</el-radio-button>
+              <el-radio-button label="1">{{$t('product.month')}}</el-radio-button>
+              <el-radio-button label="2">{{$t('product.year')}}</el-radio-button>
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="产品利率" prop="interestRate">
+          <el-form-item :label="$t('product.interestRate')" prop="interestRate">
             <el-input type="number" v-model="productMaterialFeeForm.interestRate" placeholder="请输入产品利率，如0.36"></el-input>
           </el-form-item>
 
-          <el-form-item label="产品分期类型" prop="instalType">
+          <el-form-item :label="$t('product.instalmentType')" prop="instalType">
             <el-radio-group v-model="productMaterialFeeForm.instalType">
-              <el-radio-button label="0">日</el-radio-button>
-              <el-radio-button label="1">月</el-radio-button>
-              <el-radio-button label="2">年</el-radio-button>
+              <el-radio-button label="0">{{$t('product.day')}}</el-radio-button>
+              <el-radio-button label="1">{{$t('product.month')}}</el-radio-button>
+              <el-radio-button label="2">{{$t('product.year')}}</el-radio-button>
             </el-radio-group>
           </el-form-item>
 
-          <el-form-item label="产品分期期数" prop="instalPeriodList">
+          <el-form-item :label="$t('product.instalmentPeriods')" prop="instalPeriodList">
             <el-input v-model="productMaterialFeeForm.instalPeriodList" placeholder="分期期数列表数组以逗号分隔，如 3;6;12"></el-input>
           </el-form-item>
 
-          <el-form-item label="分期归还类型" prop="instalReturnType">
+          <el-form-item :label="$t('product.instalmentReturnType')" prop="instalReturnType">
             <el-radio-group v-model="productMaterialFeeForm.instalReturnType">
-              <el-radio :label="0">一次性归还</el-radio>
-              <el-radio :label="1">按分期类型归还</el-radio>
+              <el-radio :label="0">{{$t('product.oneTimeReturn')}}</el-radio>
+              <el-radio :label="1">{{$t('product.returnByInstallment')}}</el-radio>
             </el-radio-group>
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="productMaterialFeeUpdate">保存</el-button>
+            <el-button type="primary" @click="productMaterialFeeUpdate">{{$t('product.save')}}</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -182,14 +182,7 @@ export default {
     ...mapGetters([
       'productId',
       'userInfo'
-    ]),
-    baseInfoBtnTxt() {
-      if (!this.productId) {
-        return '创建合作应用'
-      } else {
-        return '更新合作应用'
-      }
-    }
+    ])
   },
   created() {
     // 获取产品提供方
@@ -228,7 +221,7 @@ export default {
           val.splice(index, 1)
           this.$message({
             showClose: true,
-            message: '请先创建合作产品',
+            message: this.$t('product.pleaseCreateProductFirst'),
             type: 'warning'
           })
         }

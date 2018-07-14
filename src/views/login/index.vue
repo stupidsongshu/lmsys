@@ -2,25 +2,27 @@
   <div class="login-container">
     <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
       class="card-box login-form">
-      <h3 class="title">乐贷款后台配置系统</h3>
+      <h3 class="title">{{$t('login.title')}}</h3>
+      <lang-select class="language"></lang-select>
       <el-form-item prop="account">
-        <span class="svg-container svg-container_login">
-          <!-- <svg-icon icon-class="user" /> -->
+        <span class="svg-container">
+          <svg-icon icon-class="account" />
         </span>
-        <el-input name="username" type="text" v-model="loginForm.account" autoComplete="on" placeholder="username" />
+        <el-input name="username" type="text" v-model="loginForm.account" autoComplete="on" :placeholder="$t('login.account')" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
-          <!-- <svg-icon icon-class="password"></svg-icon> -->
+          <svg-icon icon-class="password"></svg-icon>
         </span>
         <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
-          placeholder="password"></el-input>
+          :placeholder="$t('login.password')"></el-input>
           <span class="show-pwd" @click="showPwd">
-            <!-- <svg-icon icon-class="eye" /> -->
+            <svg-icon v-show="pwdType == 'text'" icon-class="eye-open" />
+            <svg-icon v-show="pwdType == 'password'" icon-class="eye-close" />
           </span>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
+        <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -28,13 +30,17 @@
 
 <script>
 import { isEmptyStr } from '@/utils/validate'
+import LangSelect from '@/components/LangSelect'
 
 export default {
   name: 'login',
+  components: {
+    LangSelect
+  },
   data() {
     const validateIsEmptyStr = (rule, value, cb) => {
       if (isEmptyStr(value)) {
-        cb(new Error('该项为必填项'))
+        cb(new Error())
       } else {
         cb()
       }
@@ -46,8 +52,14 @@ export default {
         password: ''
       },
       loginRules: {
-        account:  [{ required: true, trigger: 'blur', message: '账号不能为空', validator: validateIsEmptyStr }],
-        password: [{ required: true, trigger: 'blur', message: '密码不能为空', validator: validateIsEmptyStr }]
+        account:  [
+          { required: true, trigger: 'blur', message: this.$t('login.validate.accEmpty'), validator: validateIsEmptyStr },
+          { required: true, trigger: 'change', message: this.$t('login.validate.accEmpty'), validator: validateIsEmptyStr },
+        ],
+        password: [
+          { required: true, trigger: 'blur', message: this.$t('login.validate.pswEmpty'), validator: validateIsEmptyStr },
+          { required: true, trigger: 'change', message: this.$t('login.validate.pswEmpty'), validator: validateIsEmptyStr }
+        ]
       },
       loading: false,
       pwdType: 'password',
@@ -74,7 +86,7 @@ export default {
             if (res.returnCode === '000000') {
               this.$message({
                 showClose: true,
-                message: '登录成功',
+                message: this.$t('login.logSuccess'),
                 type: 'success'
               })
             } else {
@@ -158,6 +170,11 @@ export default {
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
+    }
+    .language {
+      position: absolute;
+      top: 42px;
+      right: 40px;
     }
     .login-form {
       position: absolute;

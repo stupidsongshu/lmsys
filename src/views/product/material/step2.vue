@@ -3,10 +3,10 @@
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item name="4">
         <template slot="title">
-          <span class="collapse-item-title">产品特性</span>
+          <span class="collapse-item-title">{{$t('product.productFeature')}}</span>
         </template>
-        <el-form ref="productMaterialFeature" :model="productMaterialFeatureForm" :label-position="labelPosition" label-width="120px">
-          <el-form-item label="特性标签">
+        <el-form ref="productMaterialFeature" :model="productMaterialFeatureForm" :label-position="labelPosition" label-width="130px">
+          <el-form-item :label="$t('product.featureTag')">
             <el-button
               class="btn-multi"
               v-for="(item, index) in productMaterialFeatureForm.characterLabelList"
@@ -35,7 +35,7 @@
             </div>
           </el-form-item>
 
-          <el-form-item label="适用人群" prop="suitRole">
+          <el-form-item :label="$t('product.suitRole')" prop="suitRole">
             <el-button
               class="btn-multi"
               v-for="(item, index) in productMaterialFeatureForm.suitRoleList"
@@ -64,7 +64,7 @@
             </div>
           </el-form-item>
 
-          <el-form-item label="推荐星数" prop="recommendStar">
+          <el-form-item :label="$t('product.recommondStar')" prop="recommendStar">
             <el-rate
               v-model="productMaterialFeatureForm.recomStar"
               show-score
@@ -73,7 +73,7 @@
             </el-rate>
           </el-form-item>
 
-          <el-form-item label="特性状态" prop="featureState">
+          <el-form-item :label="$t('product.featureState')" prop="featureState">
             <el-radio-group v-model="productMaterialFeatureForm.featureState">
               <el-radio-button label="hot">HOT</el-radio-button>
               <el-radio-button label="fast">FAST</el-radio-button>
@@ -83,14 +83,14 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="productMaterialFeatureUpdate">保存</el-button>
+            <el-button type="primary" @click="productMaterialFeatureUpdate">{{$t('product.save')}}</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
 
       <el-collapse-item name="5">
         <template slot="title">
-          <span class="collapse-item-title">申请信息</span>
+          <span class="collapse-item-title">{{$t('product.applyInfo')}}</span>
         </template>
         <el-form ref="productApply" :model="productApplyInfoForm" :label-position="labelPosition" label-width="120px">
           <!-- <el-form-item label="产品申请流程">
@@ -114,7 +114,7 @@
               </el-tag>
             </div>
           </el-form-item> -->
-          <el-form-item label="产品申请流程">
+          <el-form-item :label="$t('product.applyProcess')">
             <span
               class="process-img-container"
               :class="{'selected': item.disabled}"
@@ -138,7 +138,7 @@
             </div>
           </el-form-item>
 
-          <el-form-item label="产品申请条件">
+          <el-form-item :label="$t('product.applyCondition')">
             <el-button class="btn-multi"
               v-for="(item, index) in productApplyInfoForm.applyConditionList"
               :key="index"
@@ -166,7 +166,7 @@
             </div>
           </el-form-item>
 
-          <el-form-item label="产品申请材料">
+          <el-form-item :label="$t('product.applyMaterial')">
             <el-button
               class="btn-multi"
               v-for="(item, index) in productApplyInfoForm.applyMaterialsList"
@@ -196,7 +196,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="productApplyInfoUpdate">保存</el-button>
+            <el-button type="primary" @click="productApplyInfoUpdate">{{$t('product.save')}}</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -249,7 +249,7 @@ export default {
           val.splice(index, 1)
           this.$message({
             showClose: true,
-            message: '请先创建合作产品',
+            message: this.$t('product.pleaseCreateProductFirst'),
             type: 'warning'
           })
         }
@@ -584,6 +584,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-rate {
+  line-height: 2.5;
+}
 .btn-multi {
   width: 100px;
   margin-left: 0 !important;

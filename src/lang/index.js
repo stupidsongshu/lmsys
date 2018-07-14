@@ -1,25 +1,28 @@
 import Vue from 'vue'
 import Cookies from 'js-cookie'
 import VueI18n from 'vue-i18n'
-import elementEnLocal from 'element-ui/lib/locale/lang/en'
-import elementZhLocal from 'element-ui/lib/locale/lang/zh-CN'
+import elementEnLocale from 'element-ui/lib/locale/lang/en'
+import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'
+
+import zhLocale from './zh'
+import enLocale from './en'
 
 Vue.use(VueI18n)
 
 const messages = {
   en: {
-    ...elementEnLocal,
-    message: 'hello'
+    ...elementEnLocale,
+    ...enLocale
   },
   zh: {
-    ...elementZhLocal,
-    message: '你好'
+    ...elementZhLocale,
+    ...zhLocale
   }
 }
 
 const i18n = new VueI18n({
   // set locale
-  locale: Cookies.get('language') || 'en',
+  locale: Cookies.get('language') || 'zh',
   // set locale messages
   messages
 })
