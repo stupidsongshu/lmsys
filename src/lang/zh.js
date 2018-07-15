@@ -14,7 +14,7 @@ export default {
     partnerAdd: '添加'
   },
   navbar: {
-    home: '首页',
+    home: '主页',
     logOut: '退出登录'
   },
   login: {

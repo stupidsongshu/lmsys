@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div style="margin-top: 50px; text-align: center;">
     <img src="../../assets/images/avatar.jpg" alt="">
-    <h1>{{account}}, {{$t('greeting.' + timeFlag)}}！</h1>
+    <h1>{{account}}, {{$t('greeting.' + timeFlag)}}!</h1>
   </div>
 </template>
 
@@ -26,7 +26,9 @@ export default {
     this.account = JSON.parse(this.userInfo).account
 
     if (this.$i18n.getLocaleMessage(this.language)['greeting'] === undefined) {
-      this.$i18n.mergeLocaleMessage(this.language, Locale[this.language])
+      for (let locale in Locale) {
+        this.$i18n.mergeLocaleMessage(locale, Locale[locale])
+      }
     }
 
     const hour = new Date().getHours()

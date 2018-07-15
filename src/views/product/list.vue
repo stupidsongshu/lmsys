@@ -184,9 +184,11 @@ export default {
 		width: 26px;
 	}
 	.online {
-		color: #409EFF;
+    color: #409EFF;
+    cursor: pointer;
 	}
 	.offline {
-		color: grey;
+    color: grey;
+    cursor: pointer;
 	}
 </style>
