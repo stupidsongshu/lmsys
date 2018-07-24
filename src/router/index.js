@@ -18,7 +18,7 @@ const routes = [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: 'dashboard' }
+        meta: { title: 'dashboard', icon: 'home' }
       }
     ]
   },
