@@ -89,6 +89,12 @@ export default {
                 message: this.$t('login.logSuccess'),
                 type: 'success'
               })
+
+              if (!!this.redirect) {
+                this.$router.push({path: this.redirect})
+              } else {
+                this.$router.push({ name: 'dashboard' })
+              }
             } else {
               this.$message({
                 showClose: true,
@@ -96,18 +102,11 @@ export default {
                 type: 'warning'
               })
             }
-
-            if (!!this.redirect) {
-              this.$router.push({path: this.redirect})
-            } else {
-              this.$router.push({ name: 'dashboard' })
-            }
           }).catch((err) => {
             this.loading = false
-            console.log(err)
             this.$message({
               showClose: true,
-              message: err.returnMsg,
+              message: this.$t('netWorkError'),
               type: 'error'
             })
           })

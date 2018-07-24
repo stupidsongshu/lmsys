@@ -1,5 +1,6 @@
 export default {
   switchLanguageTxt: 'switch language successfully: English',
+  netWorkError: 'fetch data failed, please try again later',
   route: {
     dashboard: 'Dashboard',
 

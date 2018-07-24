@@ -1,5 +1,6 @@
 export default {
   switchLanguageTxt: '切换语言成功: 简体中文',
+  netWorkError: '获取数据失败，请稍后重试！',
   route: {
     dashboard: '主页',
 
