@@ -5,7 +5,7 @@ Vue.use(Router)
 
 import Layout from '@/views/layout/Layout'
 
-const routes = [
+export const routes = [
   { path: '/login', name: 'login', component: () => import('@/views/login/index'), hidden: true },
   {
     path: '',
@@ -28,6 +28,7 @@ const routes = [
     redirect: '/product/list',
     name: 'product',
     meta: { title: 'product', icon: 'product' },
+    alwaysShow: true,
     children: [
       {
         path: 'list',
@@ -39,7 +40,7 @@ const routes = [
         path: 'material',
         component: () => import('@/views/product/material/index'),
         redirect: {name: 'productMaterialStep1'},
-        hidden: false,
+        hidden: true,
         name: 'productMaterial',
         meta: { title: 'productMaterial' },
         children: [
@@ -47,7 +48,7 @@ const routes = [
             path: 'step1',
             component: () => import('@/views/product/material/step1'),
             name: 'productMaterialStep1',
-            meta: { title: 'productMaterialStep1', step: 1 },
+            meta: { title: 'productMaterialStep1', step: 1 }
           },
           {
             path: 'step2',
